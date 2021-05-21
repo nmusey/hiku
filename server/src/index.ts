@@ -1,14 +1,11 @@
-import express from "express";
-import path from "path";
+import { STATIC_PATH } from "./constants/Paths";
+import { baseRouter } from "./routers/base.router";
+import { Server } from "./server/Server";
 
-const app = express();
+const PORT = 3000;
 
-const STATIC_PATH = path.resolve(__dirname, "../client");
+const server = new Server(STATIC_PATH);
 
-app.use(express.static(STATIC_PATH));
+server.addRouter(baseRouter, "/");
 
-app.get("/", (req, res) => {
-    res.sendFile(path.resolve(STATIC_PATH, "index.html"));
-})
-
-app.listen(3000, () => console.log("server is up"));
+server.start(PORT);
