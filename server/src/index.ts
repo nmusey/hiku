@@ -8,7 +8,6 @@ const STATIC_PATH = path.resolve(__dirname, "../client");
 app.use(express.static(STATIC_PATH));
 
 app.get("/", (req, res) => {
-    console.log("dirname", __dirname);
     res.sendFile(path.resolve(STATIC_PATH, "index.html"));
 })
 
