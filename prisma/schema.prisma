@@ -1,0 +1,45 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                  Int       @id @default(autoincrement())
+  email               String    @unique
+  username            String    @unique
+  password            String
+  registered          DateTime  @default(now())
+  registrationToken   String       
+
+  posts               Post[]
+  snaps               Snap[]
+
+  following           User[]    @relation("UserFollows", references: [id])
+  followers           User[]    @relation("UserFollows", references: [id])
+}
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  firstLine     String
+  secondLine    String
+  thirdLine     String
+
+  author        User      @relation(fields: [authorId], references: [id])
+  authorId      Int
+  snaps         Snap[]
+  snapIds       Int[]
+}
+
+model Snap {
+  id              Int   @id @default(autoincrement())
+
+  snapper         User  @relation(fields: [snapperId], references: [id])
+  snapperId       Int
+  snappedPost     Post  @relation(fields: [snappedPostId], references: [id])
+  snappedPostId   Int
+}

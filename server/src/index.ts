@@ -3,7 +3,7 @@ import {config as dotenvSafeConfig} from "dotenv-safe";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 dotenvSafeConfig({
-    path: isDevelopment ? "dev.env" : ".env",
+    path: isDevelopment ? ".env.dev" : ".env",
     example: ".env.example"
 });
 
