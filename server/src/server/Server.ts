@@ -1,4 +1,7 @@
-import express, {Express, Router, json} from "express";
+import express, {Express, Router, json } from "express";
+import cors from "cors";
+import { isDevelopment } from "../constants/Environment";
+import { loggerMiddleware } from "../middlewares/loggerMiddleware";
 
 export class Server {
     server: Express;
@@ -9,6 +12,11 @@ export class Server {
 
         if (staticDirectory) {
             this.server.use(express.static(staticDirectory));
+        }
+
+        if (isDevelopment) {
+            this.server.use(cors());
+            this.server.use(loggerMiddleware);
         }
     }
 

@@ -1,3 +1,3 @@
-import path from "path";
+import { resolve } from "path";
 
-export const STATIC_PATH = path.resolve(__dirname, "..", "..", "client");
+export const STATIC_PATH = resolve(__dirname, "..", "..", "..", "client");

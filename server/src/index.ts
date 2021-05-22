@@ -1,6 +1,5 @@
 import {config as dotenvSafeConfig} from "dotenv-safe";
-
-const isDevelopment = process.env.NODE_ENV !== "production";
+import { isDevelopment } from "./constants/Environment";
 
 dotenvSafeConfig({
     path: isDevelopment ? ".env.dev" : ".env",
@@ -9,6 +8,7 @@ dotenvSafeConfig({
 
 import { STATIC_PATH } from "./constants/Paths";
 import { baseRouter } from "./routers/base.router";
+import { authRouter } from "./routers/auth.router";
 import { Server } from "./server/Server";
 
 const PORT = parseInt(process.env.PORT || "3000");
@@ -16,5 +16,6 @@ const PORT = parseInt(process.env.PORT || "3000");
 const server = new Server(STATIC_PATH);
 
 server.addRouter(baseRouter, "/");
+server.addRouter(authRouter, "/api/auth");
 
 server.start(PORT);
