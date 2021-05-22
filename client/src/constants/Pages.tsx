@@ -1,5 +1,6 @@
 import React from "react";
 import { LoginPage } from "../pages/LoginPage";
+import { PostListPage } from "../pages/PostListPage";
 
 export interface Page {
     name: string;
@@ -12,5 +13,6 @@ export const Pages: {[key: string]: Page} = {
     Login: { name: "Login", route: "/auth/login", component: <LoginPage />, authenticated: false },
     Logout: { name: "Logout", route: "/auth/logout", component: "Logout page", authenticated: false},
     Register: { name: "Register", route: "/auth/register", component: "Register page", authenticated: false},
-    ConfirmRegistration: { name: "Confirm Registration", route: "/auth/confirmRegistration", component: "Confirm registration page", authenticated: false}
+    ConfirmRegistration: { name: "Confirm Registration", route: "/auth/confirmRegistration", component: "Confirm registration page", authenticated: false},
+    PostList: { name: "Posts", route: "/posts", component: <PostListPage />, authenticated: true},
 };

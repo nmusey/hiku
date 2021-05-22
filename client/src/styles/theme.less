@@ -4,6 +4,9 @@
 /*/
 
 @primary-color: #91E619;
+@secondary-color: #865A18;
+@tertiary-color: #8CA019;
+
 @info-color: @primary-color;
 @processing-color: @primary-color;
 @success-color: #84BF2C;
@@ -26,6 +29,10 @@
 @layout-header-padding: 0 calc(24px + @layout-content-padding);
 
 
+/* Menu */
+@menu-bg: @primary-color;
+
+
 /* Typography */
 @typography-title-margin-top: 0;
 @typography-title-margin-bottom: 0;
@@ -42,4 +49,10 @@
 
 .ant-layout-content {
     padding: @layout-content-padding;
+}
+
+nav {
+    background-color: @primary-color;
+    padding: 16px 40px;
+    box-sizing: content-box;
 }
