@@ -1,0 +1,45 @@
+/*/
+ *   This file overwrites these values
+ *   https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+/*/
+
+@primary-color: #91E619;
+@info-color: @primary-color;
+@processing-color: @primary-color;
+@success-color: #84BF2C;
+@error-color: #AD2F1F;
+@highlight-color: @error-color;
+@warning-color: #FFA737;
+@normal-color: #8CA019;
+@white: #F1F1EA;
+@black: #343330;
+
+
+/* Global */
+@body-background: @white;
+@component-background: @white;
+
+
+/* Layout */
+@layout-body-background: @white;
+@layout-header-background: @primary-color;
+@layout-header-padding: 0 calc(24px + @layout-content-padding);
+
+
+/* Typography */
+@typography-title-margin-top: 0;
+@typography-title-margin-bottom: 0;
+
+
+
+/* Overwrites */
+
+@layout-content-padding: 16px;
+
+.ant-layout {
+    min-height: calc(100vh);
+}
+
+.ant-layout-content {
+    padding: @layout-content-padding;
+}

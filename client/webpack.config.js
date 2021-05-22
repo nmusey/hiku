@@ -12,7 +12,7 @@ module.exports = {
         filename: "bundle.js",
     },
     resolve: {
-        extensions: [".ts", ".tsx", ".js"],
+        extensions: [".ts", ".tsx"],
     },
     devtool: isDevelopment ? "eval" : false,
     module: {
@@ -29,7 +29,20 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: ["style-loader", "css-loader", "less-loader"]
+                include: [
+                    path.resolve(__dirname, "src", "styles"), 
+                    path.resolve(__dirname, "..", "node_modules", "antd")
+                ],
+                use: [
+                    "style-loader", 
+                    "css-loader",
+                    {
+                        loader: "less-loader",
+                        options: {
+                            lessOptions: { javascriptEnabled: true }
+                        }
+                    } 
+                ]
             },
             {
                 test: /\.css$/,
