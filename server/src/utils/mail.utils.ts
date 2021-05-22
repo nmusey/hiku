@@ -11,7 +11,9 @@ const transport = createTransport({
     }
 });
 
-export const sendRegistrationEmail = async (toAddress: string, userId: number, token: string): Promise<boolean> => {
+export const sendRegistrationEmail = async (toAddress: string, username: string, token: string): Promise<boolean> => {
+    const link = `${URL}/app/auth/confirmRegistration/${username}/${token}`;
+    
     const mailOptions: SendMailOptions = {
         from: {
             name: "Hi-Ku",
@@ -22,7 +24,9 @@ export const sendRegistrationEmail = async (toAddress: string, userId: number, t
         html: `
         Welcome to Hi-Ku! 
         Before you start your poems,
-        please click on <a href=${`${URL}/app/auth/confirmRegistration/${userId}/${token}`}>this link</a>.
+        please click on <a href=${link}>this link</a>.
+
+        If the above link doesn't work, use this one: ${link}
         `
     };
 
