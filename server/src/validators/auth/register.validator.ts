@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const registerValidator = [
+export const registerValidators = [
         body("email")
             .normalizeEmail()
             .notEmpty().withMessage("Please provide an email")

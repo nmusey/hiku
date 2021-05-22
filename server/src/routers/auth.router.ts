@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, Router } from "express";
-import { registerValidator } from "../validators/auth/register.validator";
+import { registerValidators } from "../validators/auth/register.validator";
 import { RegisterRequest, RegisterResponse } from "../../../common/dtos/auth/Register";
 import { validationMiddleware } from "../middlewares/validationMiddleware";
 import { createRegistrationToken, hashPassword } from "../utils/cryptography.utils";
@@ -9,7 +9,7 @@ import { sendRegistrationEmail } from "../utils/mail.utils";
 export const authRouter = Router();
 const prisma = new PrismaClient();
 
-authRouter.post("/register", registerValidator, validationMiddleware, async (req: Request, res: Response) => {
+authRouter.post("/register", registerValidators, validationMiddleware, async (req: Request, res: Response) => {
     const {email, username, password} = req.body as RegisterRequest;
     const hashedPassword = await hashPassword(password);
 
