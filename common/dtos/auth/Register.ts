@@ -4,4 +4,6 @@ export interface RegisterRequest {
     password: string;
 }
 
-export interface RegisterResponse {}
+export interface RegisterResponse {
+    email: string;
+}

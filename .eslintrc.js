@@ -34,6 +34,7 @@ module.exports = {
 			"error",
 			"always"
 		],
-		"@typescript-eslint/no-empty-interface": "off"
+		"@typescript-eslint/no-empty-interface": "off",
+		"@typescript-eslint/no-non-null-assertion": "off"
 	}
 };
