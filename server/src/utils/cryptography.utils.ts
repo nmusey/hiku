@@ -26,4 +26,4 @@ export const compareHashedPasswords = async (storedPassword: string, suppliedPas
 
 export const createRegistrationToken = (): string => {
     return randomBytes(REGISTRATION_TOKEN_LENGTH).toString("hex");
-}
+};
