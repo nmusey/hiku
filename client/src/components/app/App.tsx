@@ -1,5 +1,6 @@
 import React from "react";
+import { Router } from "./Router";
 
 export const App = (): JSX.Element => (
-    <h1>Hello from client</h1>
+    <Router />
 );

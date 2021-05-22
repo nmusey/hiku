@@ -15,7 +15,7 @@ const PORT = parseInt(process.env.PORT || "3000");
 
 const server = new Server(STATIC_PATH);
 
-server.addRouter(baseRouter, "/");
 server.addRouter(authRouter, "/api/auth");
+server.addRouter(baseRouter, "");
 
 server.start(PORT);
