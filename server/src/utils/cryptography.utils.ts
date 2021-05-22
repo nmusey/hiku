@@ -13,7 +13,7 @@ export const hashPassword = async (plaintext: string): Promise<string> => {
     return `${buffer.toString("hex")}.${salt}`;
 };
 
-export const compareHashedPasswords = async (storedPassword: string, suppliedPassword: string): Promise<boolean> => {
+export const comparePasswordToHashed = async (storedPassword: string, suppliedPassword: string): Promise<boolean> => {
     if (!storedPassword || !suppliedPassword) {
         return false;
     }

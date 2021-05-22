@@ -1,13 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, Router } from "express";
-import { registerValidators } from "../validators/auth/register.validator";
+import { registerValidators } from "../validators/auth/register.validators";
 import { RegisterRequest, RegisterResponse } from "../../../common/dtos/auth/Register";
 import { validationMiddleware } from "../middlewares/validationMiddleware";
-import { createRegistrationToken, hashPassword } from "../utils/cryptography.utils";
+import { comparePasswordToHashed, createRegistrationToken, hashPassword } from "../utils/cryptography.utils";
 import { sendRegistrationEmail } from "../utils/mail.utils";
-import { confirmRegistrationValidators } from "../validators/auth/confirmRegistration.validator";
+import { confirmRegistrationValidators } from "../validators/auth/confirmRegistration.validators";
 import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../../common/dtos/auth/ConfirmRegistration";
 import { setJwt } from "../utils/jwt.utils";
+import { loginValidators } from "../validators/auth/login.validators";
+import { LoginResponse } from "../../../common/dtos/auth/Login";
 
 export const authRouter = Router();
 const prisma = new PrismaClient();
@@ -47,20 +49,62 @@ authRouter.post("/confirmRegistration", confirmRegistrationValidators, validatio
     const user = await prisma.user.findUnique({ where: { username } });
 
     if (!user) {
-        return res.status(400).json(["Please try registering again."]);
+        return res.status(400).json([ "Please try registering again." ]);
+    }
+
+    if (!user.registrationToken) {
+        return res.status(400).json([ "Your account has already been confirmed. Login to continue." ]);
     }
 
     if (user.registrationToken === token) {
-        prisma.user.update({
+        await prisma.user.update({
             where: { id: user.id },
             data: { registrationToken: "" }
         });
 
         setJwt(res, user);        
 
-        const responseBody = {} as ConfirmRegistrationResponse;
-        return res.status(200).send(responseBody);
+        const responseBody = {
+            id: user.id,
+            username: user.username,
+            followers: 0,
+            doesCurrentUserFollow: false
+        } as ConfirmRegistrationResponse;
+        return res.send(responseBody);
     } else {
         return res.status(401);
     }
+});
+
+authRouter.post("/login", loginValidators, validationMiddleware, async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    const genericMessage = "Invalid email or password.";
+
+    const user = await prisma.user.findUnique({ 
+        where: { email },
+        include: { followers: true }
+    });
+
+    if (!user) {
+        return res.status(401).json([ genericMessage ]);
+    }
+
+    if (user.registrationToken) {
+        return res.status(400).json([ "Please confirm your email before logging in." ]);
+    }
+
+    const doPasswordsMatch = await comparePasswordToHashed(user.password, password);
+    if (!doPasswordsMatch) {
+        return res.status(401).json([ genericMessage ]);
+    }
+
+    const responseBody: LoginResponse = {
+        id: user.id,
+        username: user.username,
+        followers: user.followers.length,
+        doesCurrentUserFollow: false
+    };
+
+    setJwt(res, user);
+    return res.json(responseBody);
 });
