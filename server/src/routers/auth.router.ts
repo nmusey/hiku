@@ -7,7 +7,7 @@ import { comparePasswordToHashed, createRegistrationToken, hashPassword } from "
 import { sendRegistrationEmail } from "../utils/mail.utils";
 import { confirmRegistrationValidators } from "../validators/auth/confirmRegistration.validators";
 import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../../common/dtos/auth/ConfirmRegistration";
-import { setJwt } from "../utils/jwt.utils";
+import { setInvalidJwt, setJwt } from "../utils/jwt.utils";
 import { loginValidators } from "../validators/auth/login.validators";
 import { LoginResponse } from "../../../common/dtos/auth/Login";
 
@@ -107,4 +107,9 @@ authRouter.post("/login", loginValidators, validationMiddleware, async (req: Req
 
     setJwt(res, user);
     return res.json(responseBody);
+});
+
+authRouter.post("/logout", async (req: Request, res: Response) => {
+    setInvalidJwt(res);
+    return res.send({});
 });
