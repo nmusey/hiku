@@ -2,7 +2,7 @@ import { body } from "express-validator";
 
 export const registerValidator = [
         body("email")
-            // .normalizeEmail()
+            .normalizeEmail()
             .notEmpty().withMessage("Please provide an email")
             .isEmail().withMessage("Please provide a valid email address.")
         ,
