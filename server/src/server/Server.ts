@@ -1,7 +1,7 @@
 import express, {Express, Router, json } from "express";
 import cors from "cors";
-import { isDevelopment } from "../constants/Environment";
-import { loggerMiddleware } from "../middlewares/logger.middleware";
+import { isDevelopment } from "../constants/Environment.js";
+import { loggerMiddleware } from "../middlewares/logger.middleware.js";
 
 export class Server {
     server: Express;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { serveStaticFile } from "../utils/response.utils";
+import { serveStaticFile } from "../utils/response.utils.js";
 
 export const baseRouter = Router();
 

@@ -1,4 +1,7 @@
-import { Controller } from "./Controller";
+export enum Controller {
+    Auth = "auth",
+    Post = "post"
+}
 
 export interface Endpoint {
     controller: Controller;
@@ -12,4 +15,5 @@ export const Endpoints: Record<string, Endpoint> = {
     Logout: {controller: Controller.Auth, action: "logout"},
 
     ListPosts: { controller: Controller.Post, action: ""},
+    CreatePost: { controller: Controller.Post, action: "create"}
 };

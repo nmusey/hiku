@@ -1,7 +1,7 @@
 import React from "react";
 import { LoginPage } from "../pages/auth/LoginPage";
 import { RegisterPage } from "../pages/auth/RegisterPage";
-import { PostListPage } from "../pages/PostListPage";
+import { PostListPage } from "../pages/posts/PostListPage";
 import { RegisterSuccessPage } from "../pages/auth/RegisterSuccessPage";
 import { ConfirmRegistrationPage } from "../pages/auth/ConfirmRegistrationPage";
 import { LogoutPage } from "../pages/auth/LogoutPage";

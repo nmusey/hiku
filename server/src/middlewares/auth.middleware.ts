@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getBearerToken, decodeJWT, refreshJWT, JWT_HEADER_KEY } from "../utils/jwt.utils";
+import { getBearerToken, decodeJWT, refreshJWT, JWT_HEADER_KEY } from "../utils/jwt.utils.js";
 
 export const authMiddleware: RequestHandler = (req, res, next): void => {
     const jwt = getBearerToken(req);

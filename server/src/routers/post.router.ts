@@ -1,19 +1,23 @@
-import { PrismaClient } from ".prisma/client";
+import Prisma from "@prisma/client";
 import { Request, Response, Router } from "express";
-import { Endpoints } from "../../../common/constants/Endpoints";
-import { ListPostsResponse } from "../../../common/dtos/post/ListPosts";
-import { authMiddleware } from "../middlewares/auth.middleware";
-import { getUserFromJWT } from "../utils/jwt.utils";
+import { Endpoints } from "../../../common/constants/Endpoints.js";
+import { CreatePostRequest } from "../../../common/dtos/post/CreatePost.js";
+import { ListPostsResponse } from "../../../common/dtos/post/ListPosts.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { validationMiddleware } from "../middlewares/validation.middleware.js";
+import { getUserFromJWT } from "../utils/jwt.utils.js";
+import { createPostValidators } from "../validators/post/CreatePost.js";
+import { listPostsValidators } from "../validators/post/ListPosts.js";
 
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 export const postRouter = Router();
 
 postRouter.use(authMiddleware);
 
-postRouter.get("/" + Endpoints.ListPosts.action, async (req: Request, res: Response) => {
+postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validationMiddleware, async (req: Request, res: Response) => {
     const POSTS_PER_REQUEST = 10;
-    const userId = getUserFromJWT(req).id;
+    const userId = getUserFromJWT(req)!.id;
 
     const cursor = parseInt(req.query.cursor as string);
 
@@ -43,5 +47,24 @@ postRouter.get("/" + Endpoints.ListPosts.action, async (req: Request, res: Respo
     };
 
     res.json(responseBody);
+});
 
+postRouter.post("/" + Endpoints.CreatePost.action, createPostValidators, validationMiddleware, async (req: Request, res: Response) => {
+    const userId = getUserFromJWT(req)!.id;
+
+    const { firstLine, secondLine, thirdLine } = req.body as CreatePostRequest;
+    console.log(req.body);
+
+    await prisma.post.create({
+        data: {
+            firstLine,
+            secondLine,
+            thirdLine,
+            author: { 
+                connect: { id: userId }
+            }
+        }
+    });
+
+    res.sendStatus(200);
 });

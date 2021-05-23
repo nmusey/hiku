@@ -1,17 +1,16 @@
 import {config as dotenvSafeConfig} from "dotenv-safe";
-import { isDevelopment } from "./constants/Environment";
 
 dotenvSafeConfig({
-    path: isDevelopment ? ".env.dev" : ".env",
+    path: ".env",
     example: ".env.example"
 });
 
-import { STATIC_PATH } from "./constants/Paths";
-import { baseRouter } from "./routers/base.router";
-import { authRouter } from "./routers/auth.router";
-import { Server } from "./server/Server";
-import { Controller } from "../../common/constants/Controller";
-import { postRouter } from "./routers/post.router";
+import { STATIC_PATH } from "./constants/Paths.js";
+import { baseRouter } from "./routers/base.router.js";
+import { authRouter } from "./routers/auth.router.js";
+import { Server } from "./server/Server.js";
+import { Controller } from "../../common/constants/Endpoints.js";
+import { postRouter } from "./routers/post.router.js";
 
 const PORT = parseInt(process.env.PORT || "3000");
 

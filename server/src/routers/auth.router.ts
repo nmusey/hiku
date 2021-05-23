@@ -1,19 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import Prisma from "@prisma/client";
 import { Request, Response, Router } from "express";
-import { registerValidators } from "../validators/auth/register.validators";
-import { RegisterRequest, RegisterResponse } from "../../../common/dtos/auth/Register";
-import { validationMiddleware } from "../middlewares/validation.middleware";
-import { comparePasswordToHashed, createRegistrationToken, hashPassword } from "../utils/cryptography.utils";
-import { sendRegistrationEmail } from "../utils/mail.utils";
-import { confirmRegistrationValidators } from "../validators/auth/confirmRegistration.validators";
-import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../../common/dtos/auth/ConfirmRegistration";
-import { setInvalidJwt, setJwt } from "../utils/jwt.utils";
-import { loginValidators } from "../validators/auth/login.validators";
-import { LoginResponse } from "../../../common/dtos/auth/Login";
-import { Endpoints } from "../../../common/constants/Endpoints";
+import { registerValidators } from "../validators/auth/register.validators.js";
+import { RegisterRequest, RegisterResponse } from "../../../common/dtos/auth/Register.js";
+import { validationMiddleware } from "../middlewares/validation.middleware.js";
+import { comparePasswordToHashed, createRegistrationToken, hashPassword } from "../utils/cryptography.utils.js";
+import { sendRegistrationEmail } from "../utils/mail.utils.js";
+import { confirmRegistrationValidators } from "../validators/auth/confirmRegistration.validators.js";
+import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../../common/dtos/auth/ConfirmRegistration.js";
+import { setInvalidJwt, setJwt } from "../utils/jwt.utils.js";
+import { loginValidators } from "../validators/auth/login.validators.js";
+import { LoginResponse } from "../../../common/dtos/auth/Login.js";
+import { Endpoints } from "../../../common/constants/Endpoints.js";
 
 export const authRouter = Router();
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 authRouter.post("/" + Endpoints.Register.action, registerValidators, validationMiddleware, async (req: Request, res: Response) => {
     const {email, username, password} = req.body as RegisterRequest;

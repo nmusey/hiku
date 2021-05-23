@@ -1,3 +1,5 @@
-import { resolve } from "path";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
 
-export const STATIC_PATH = resolve(__dirname, "..", "..", "..", "client");
+const currentDirectory = dirname(fileURLToPath(import.meta.url));
+export const STATIC_PATH = resolve(currentDirectory, "..", "..", "..", "client");

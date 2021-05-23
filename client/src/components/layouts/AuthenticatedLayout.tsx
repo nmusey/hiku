@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Layout, Row } from "antd";
 import { Navbar } from "../ui/Navbar";
 import { useAuthentication } from "../../hooks/useAuthentication";
+import { CreatePostModal } from "../post/CreatePostModal";
 
 export interface Props {
     children: React.ReactNode;
@@ -12,6 +13,7 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
     const { Content } = Layout;
 
     const [isWideWindow, setIsWideWindow] = useState(window.innerWidth > MOBILE_BREAKPOINT);
+    const [createPostModalOpen, setCreatePostModalOpen] = useState(false);
 
     useAuthentication();
 
@@ -21,6 +23,12 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
         });
     }, []);
 
+    const ModalContainer = (
+        <>
+            <CreatePostModal visible={createPostModalOpen} closeModal={() => setCreatePostModalOpen(false)}/>
+        </>
+    );
+
     const mobileLayout = (
         <Layout className="fill">
             <Content className="fill center-vertical">
@@ -29,21 +37,23 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
                 }
             </Content>
             <Row justify="space-around" align="middle" className="fill">
-                <Navbar />
+                <Navbar openCreatePostModal={() => setCreatePostModalOpen(true)} />
             </Row>
+            { ModalContainer }
         </Layout>
     );
 
     const desktopLayout = (
         <Layout className="fill">
             <Row justify="space-around" align="middle" className="fill">
-                <Navbar />
+                <Navbar openCreatePostModal={() => setCreatePostModalOpen(true)} />
             </Row>
             <Content className="fill center-vertical">
                 {
                     props.children
                 }
             </Content>
+            { ModalContainer }
         </Layout>
     );
 

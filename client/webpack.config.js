@@ -1,14 +1,16 @@
-const path = require("path");
-
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-module.exports = {
-    entry: path.resolve(__dirname, "src", "index.tsx"),
+const currentDirectory = dirname(fileURLToPath(import.meta.url));
+
+export default {
+    entry: resolve(currentDirectory, "src", "index.tsx"),
     output: {
-        path: path.resolve(__dirname, "..", "build", "client"),
+        path: resolve(currentDirectory, "..", "build", "client"),
         filename: "bundle.js",
     },
     resolve: {
@@ -20,7 +22,12 @@ module.exports = {
         rules: [
             {
                 test: /\.(ts|tsx)$/,
-                loader: "ts-loader",
+                use: {
+                    loader: "ts-loader",
+                    options: {
+                        configFile: "tsconfig.client.json"
+                    }
+                },
                 exclude: /node_modules/
             },
             {
@@ -31,8 +38,8 @@ module.exports = {
             {
                 test: /\.less$/,
                 include: [
-                    path.resolve(__dirname, "src", "styles"), 
-                    path.resolve(__dirname, "..", "node_modules", "antd")
+                    resolve(currentDirectory, "src", "styles"), 
+                    resolve(currentDirectory, "..", "node_modules", "antd")
                 ],
                 use: [
                     "style-loader", 
@@ -57,8 +64,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "assets", "index.html"),
-            favicon: path.resolve(__dirname, "assets", "favicon", "favicon.ico")
+            template: resolve(currentDirectory, "assets", "index.html"),
+            favicon: resolve(currentDirectory, "assets", "favicon", "favicon.ico")
         }),
         new CleanWebpackPlugin()
     ],

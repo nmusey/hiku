@@ -2,15 +2,16 @@
   "name": "hiku",
   "author": "Nick Musey",
   "private": true,
+  "type": "module",
   "scripts": {
     "buildClient": "webpack --config ./client/webpack.config.js --node-env development --mode development",
-    "buildClient:watch": "webpack --config ./client/webpack.config.js --node-env development --mode development --watch",
+    "buildClient:dev": "webpack --config ./client/webpack.config.js --node-env development --mode development --watch",
     "buildServer": "tsc --project server/tsconfig.server.json",
-    "buildServer:watch": "tsc --watch --project server/tsconfig.server.json",
-    "runServer:watch": "nodemon build/server/src/index.js",
+    "buildServer:dev": "tsc --watch --project server/tsconfig.server.json",
+    "runServer:dev": "nodemon build/server/src/index.js",
     "lint": "eslint .",
     "clean": "rm -rf build",
-    "dev": "concurrently --names \"build-server,build-client,run-server\" --prefix-colors \"cyan,yellow,green\" \"npm run buildServer:watch\" \"npm run buildClient:watch\" \"npm run runServer:watch\""
+    "dev": "concurrently --names \"build-server,build-client,run-server\" --prefix-colors \"cyan,yellow,green\" \"npm run buildServer:dev\" \"npm run buildClient:dev\" \"npm run runServer:dev\""
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,8 @@
     "nodemailer": "^6.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "syllable": "^5.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
