@@ -6,5 +6,6 @@ export interface Endpoint {
 }
 
 export const Endpoints: Record<string, Endpoint> = {
-    Register: { controller: Controller.Auth, action: "register"}
+    Register: { controller: Controller.Auth, action: "register"},
+    ConfirmRegistration: { controller: Controller.Auth, action: "confirmRegistration"}
 };
