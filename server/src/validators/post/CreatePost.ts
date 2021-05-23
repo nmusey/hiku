@@ -4,8 +4,6 @@ import { syllable } from "syllable";
 const hasSyllables = (targetSyllables: number, name: string): CustomValidator => (value: string) => {
     const actualSyllables = syllable(value);
 
-    console.log("HERE");
-
     if (actualSyllables > targetSyllables) {
         throw new Error(`The ${name} line has ${actualSyllables - targetSyllables} too many syllables.`);
     } else if (actualSyllables < targetSyllables) {

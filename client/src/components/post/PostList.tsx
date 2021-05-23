@@ -10,7 +10,7 @@ export const PostList = (): JSX.Element => {
     const [isLoading, setIsLoading] = useState(false);
     const [allPostsLoaded, setAllPostsLoaded] = useState(false);
     const [loadedPosts, setLoadedPosts] = useState<Post[]>([]);
-    const [cursor, setCursor] = useState(0);
+    const [cursor, setCursor] = useState(1);
 
     async function loadPosts(): Promise<void> {
         if (allPostsLoaded) {

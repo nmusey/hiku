@@ -16,7 +16,7 @@ export const postRouter = Router();
 postRouter.use(authMiddleware);
 
 postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validationMiddleware, async (req: Request, res: Response) => {
-    const POSTS_PER_REQUEST = 10;
+    const POSTS_PER_REQUEST = 2;
     const userId = getUserFromJWT(req)!.id;
 
     const cursor = parseInt(req.query.cursor as string);
@@ -32,13 +32,20 @@ postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validation
 
     const followingIds = followingWithIds?.following.map(container => container.id);
     const posts = await prisma.post.findMany({
+        include: {
+            author: {
+                select: {
+                    username: true
+                }
+            }
+        },
         where: {
             authorId: { in: followingIds }
         },
         orderBy: { createdAt: "desc" },
         take: POSTS_PER_REQUEST,
-        skip: cursor === 0 ? 0 : 1,
-        cursor: { id: cursor }
+        skip: cursor === 1 ? 0 : 1,
+        cursor: cursor === 1 ? undefined : { id: cursor }
     });
 
     const responseBody: ListPostsResponse = {
