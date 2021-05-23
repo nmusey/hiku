@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Row } from "antd";
 import { Navbar } from "../ui/Navbar";
+import { useAuthentication } from "../../hooks/useAuthentication";
 
 export interface Props {
     children: React.ReactNode;
@@ -11,6 +12,8 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
     const { Content } = Layout;
 
     const [isWideWindow, setIsWideWindow] = useState(window.innerWidth > MOBILE_BREAKPOINT);
+
+    useAuthentication();
 
     useEffect(() => {
         window.addEventListener("resize", () => {

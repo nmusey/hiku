@@ -11,11 +11,7 @@ export const getJWT = (): string | null => {
 };
 
 export const setJWT = (newToken: string | null): void => {
-    if (!newToken) {
-        return;
-    }
-
-    window.localStorage.setItem(JWT_KEY, newToken);
+    window.localStorage.setItem(JWT_KEY, newToken || "");
 };
 
 export const readJWT = (): UserInfo | undefined => {
