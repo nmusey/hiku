@@ -12,7 +12,7 @@ const transport = createTransport({
 });
 
 export const sendRegistrationEmail = async (toAddress: string, username: string, token: string): Promise<boolean> => {
-    const link = `${URL}/app/auth/confirmRegistration/${username}/${token}`;
+    const link = `${URL}/#/auth/confirmRegistration?username=${username}&token=${token}`;
     
     const mailOptions: SendMailOptions = {
         from: {
