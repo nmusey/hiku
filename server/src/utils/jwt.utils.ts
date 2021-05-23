@@ -64,4 +64,4 @@ export const setJwt = (res: Response, user: User): void => {
 export const setInvalidJwt = (res: Response): void => {
     const jwt = generateInvalidJWT();
     res.setHeader(JWT_HEADER_KEY, jwt);
-}
+};
