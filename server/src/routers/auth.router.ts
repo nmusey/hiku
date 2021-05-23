@@ -10,11 +10,12 @@ import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../.
 import { setInvalidJwt, setJwt } from "../utils/jwt.utils";
 import { loginValidators } from "../validators/auth/login.validators";
 import { LoginResponse } from "../../../common/dtos/auth/Login";
+import { Endpoints } from "../../../common/constants/Endpoints";
 
 export const authRouter = Router();
 const prisma = new PrismaClient();
 
-authRouter.post("/register", registerValidators, validationMiddleware, async (req: Request, res: Response) => {
+authRouter.post(Endpoints.Register.action, registerValidators, validationMiddleware, async (req: Request, res: Response) => {
     const {email, username, password} = req.body as RegisterRequest;
     const hashedPassword = await hashPassword(password);
 
@@ -43,7 +44,7 @@ authRouter.post("/register", registerValidators, validationMiddleware, async (re
     return res.send(responseBody);
 });
 
-authRouter.post("/confirmRegistration", confirmRegistrationValidators, validationMiddleware, async (req: Request, res: Response) => {
+authRouter.post(Endpoints.ConfirmRegistration.action, confirmRegistrationValidators, validationMiddleware, async (req: Request, res: Response) => {
     const { username, token } = req.body as ConfirmRegistrationRequest;
 
     const user = await prisma.user.findUnique({ where: { username } });
@@ -76,7 +77,7 @@ authRouter.post("/confirmRegistration", confirmRegistrationValidators, validatio
     }
 });
 
-authRouter.post("/login", loginValidators, validationMiddleware, async (req: Request, res: Response) => {
+authRouter.post(Endpoints.Login.action, loginValidators, validationMiddleware, async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const genericMessage = "Invalid email or password.";
 
@@ -109,7 +110,7 @@ authRouter.post("/login", loginValidators, validationMiddleware, async (req: Req
     return res.json(responseBody);
 });
 
-authRouter.post("/logout", async (req: Request, res: Response) => {
+authRouter.post(Endpoints.Logout.action, async (req: Request, res: Response) => {
     setInvalidJwt(res);
     return res.send({});
 });

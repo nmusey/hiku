@@ -10,12 +10,13 @@ import { STATIC_PATH } from "./constants/Paths";
 import { baseRouter } from "./routers/base.router";
 import { authRouter } from "./routers/auth.router";
 import { Server } from "./server/Server";
+import { Controller } from "../../common/constants/Controller";
 
 const PORT = parseInt(process.env.PORT || "3000");
 
 const server = new Server(STATIC_PATH);
 
-server.addRouter(authRouter, "/api/auth");
+server.addRouter(authRouter, `/api/${Controller.Auth}`);
 server.addRouter(baseRouter, "");
 
 server.start(PORT);
