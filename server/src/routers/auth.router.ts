@@ -25,7 +25,7 @@ authRouter.post("/register", registerValidators, validationMiddleware, async (re
     });
 
     if (existingUser) {
-        return res.status(400).json(["That username or email already exists, please use another one."]);
+        return res.status(400).json({ errors: ["That username or email already exists, please use another one."] });
     }
 
     const registrationToken = createRegistrationToken();
@@ -49,11 +49,11 @@ authRouter.post("/confirmRegistration", confirmRegistrationValidators, validatio
     const user = await prisma.user.findUnique({ where: { username } });
 
     if (!user) {
-        return res.status(400).json([ "Please try registering again." ]);
+        return res.status(400).json({ errors: [ "Please try registering again." ] });
     }
 
     if (!user.registrationToken) {
-        return res.status(400).json([ "Your account has already been confirmed. Login to continue." ]);
+        return res.status(400).json({ errors: [ "Your account has already been confirmed. Login to continue." ] });
     }
 
     if (user.registrationToken === token) {
@@ -86,16 +86,16 @@ authRouter.post("/login", loginValidators, validationMiddleware, async (req: Req
     });
 
     if (!user) {
-        return res.status(401).json([ genericMessage ]);
+        return res.status(401).json({ errors: [ genericMessage ] });
     }
 
     if (user.registrationToken) {
-        return res.status(400).json([ "Please confirm your email before logging in." ]);
+        return res.status(400).json({ errors: [ "Please confirm your email before logging in." ] });
     }
 
     const doPasswordsMatch = await comparePasswordToHashed(user.password, password);
     if (!doPasswordsMatch) {
-        return res.status(401).json([ genericMessage ]);
+        return res.status(401).json({ errors: [ genericMessage ] });
     }
 
     const responseBody: LoginResponse = {
