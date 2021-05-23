@@ -15,6 +15,5 @@ export const authMiddleware: RequestHandler = (req, res, next): void => {
     const newJwt = refreshJWT(jwt);
     res.setHeader(JWT_HEADER_KEY, newJwt);
 
-    req.body.user = user;
     next();
 };

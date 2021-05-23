@@ -65,3 +65,8 @@ export const setInvalidJwt = (res: Response): void => {
     const jwt = generateInvalidJWT();
     res.setHeader(JWT_HEADER_KEY, jwt);
 };
+
+export const getUserFromJWT = (req: Request): User | null => {
+    const jwt = getBearerToken(req);
+    return decodeJWT(jwt);
+};

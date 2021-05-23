@@ -11,12 +11,14 @@ import { baseRouter } from "./routers/base.router";
 import { authRouter } from "./routers/auth.router";
 import { Server } from "./server/Server";
 import { Controller } from "../../common/constants/Controller";
+import { postRouter } from "./routers/post.router";
 
 const PORT = parseInt(process.env.PORT || "3000");
 
 const server = new Server(STATIC_PATH);
 
 server.addRouter(authRouter, `/api/${Controller.Auth}`);
+server.addRouter(postRouter, `/api/${Controller.Post}`);
 server.addRouter(baseRouter, "");
 
 server.start(PORT);

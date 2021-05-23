@@ -17,8 +17,8 @@ const buildRequestInit = (method: string, body?: Record<string, unknown>): Reque
 };
 
 export const postJSON = async (endpoint: Endpoint, body = {}): Promise<Response> => {
-    const url = buildApiEndpoint(endpoint);
     const requestInit = buildRequestInit("POST", body);
+    const url = buildApiEndpoint(endpoint);
 
     const response = await fetch(url, requestInit);
     setJWT(response.headers.get(JWT_KEY));
@@ -26,9 +26,14 @@ export const postJSON = async (endpoint: Endpoint, body = {}): Promise<Response>
     return response;
 };
 
-export const getJSON = async (endpoint: Endpoint): Promise<Response> => {
-    const url = buildApiEndpoint(endpoint);
+export const getJSON = async (endpoint: Endpoint, params?: Record<string, unknown>): Promise<Response> => {
     const requestInit = buildRequestInit("GET");
+    let url = buildApiEndpoint(endpoint);
+
+    if (params) {
+        url += "?";
+        url += Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
+    }
 
     const response = await fetch(url, requestInit);
     setJWT(response.headers.get(JWT_KEY));
