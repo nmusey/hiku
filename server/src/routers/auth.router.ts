@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { Request, Response, Router } from "express";
 import { registerValidators } from "../validators/auth/register.validators";
 import { RegisterRequest, RegisterResponse } from "../../../common/dtos/auth/Register";
@@ -11,6 +11,7 @@ import { setInvalidJwt, setJwt } from "../utils/jwt.utils";
 import { loginValidators } from "../validators/auth/login.validators";
 import { LoginResponse } from "../../../common/dtos/auth/Login";
 import { Endpoints } from "../../../common/constants/Endpoints";
+import { connect } from "http2";
 
 export const authRouter = Router();
 const prisma = new PrismaClient();
@@ -32,7 +33,15 @@ authRouter.post("/" + Endpoints.Register.action, registerValidators, validationM
     const registrationToken = createRegistrationToken();
 
     const newUser = await prisma.user.create({
-        data: { email, username, password: hashedPassword, registrationToken }
+        data: { 
+            email, 
+            username, 
+            password: hashedPassword, 
+            registrationToken,
+            following: {
+                connect: { email }
+            }
+         }
     });
 
     const emailSent = sendRegistrationEmail(email, username, registrationToken);
