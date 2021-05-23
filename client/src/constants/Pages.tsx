@@ -1,8 +1,8 @@
 import React from "react";
-import { LoginPage } from "../pages/LoginPage";
-import { RegisterPage } from "../pages/RegisterPage";
+import { LoginPage } from "../pages/auth/LoginPage";
+import { RegisterPage } from "../pages/auth/RegisterPage";
 import { PostListPage } from "../pages/PostListPage";
-import { RegisterSuccessPage } from "../pages/RegisterSuccessPage";
+import { RegisterSuccessPage } from "../pages/auth/RegisterSuccessPage";
 
 export interface Page {
     name: string;
