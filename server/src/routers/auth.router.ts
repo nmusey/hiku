@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Request, Response, Router } from "express";
 import { registerValidators } from "../validators/auth/register.validators";
 import { RegisterRequest, RegisterResponse } from "../../../common/dtos/auth/Register";
@@ -11,7 +11,6 @@ import { setInvalidJwt, setJwt } from "../utils/jwt.utils";
 import { loginValidators } from "../validators/auth/login.validators";
 import { LoginResponse } from "../../../common/dtos/auth/Login";
 import { Endpoints } from "../../../common/constants/Endpoints";
-import { connect } from "http2";
 
 export const authRouter = Router();
 const prisma = new PrismaClient();
