@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Endpoint } from "../constants/Endpoints";
-import { getJSON, postJSON } from "../utils/fetch.utils";
+import { getJSON, isResponseSuccess, postJSON } from "../utils/fetch.utils";
 
 export interface ErrorResponse {
     errors: string[];
@@ -16,8 +16,9 @@ interface UseRequestReturn<T> {
     responseBody: T | ErrorResponse;
 }
 
-export const useRequest = <Req, Res>(endpoint: Endpoint, method: RequestMethods): [boolean, (body?: Req) => Promise<UseRequestReturn<Res>>] => {
+export const useRequest = <Req, Res>(endpoint: Endpoint, method: RequestMethods): [boolean, string[], (body?: Req) => Promise<UseRequestReturn<Res>>] => {
     const [isLoading, setIsLoading] = useState(false);
+    const [ errors, setErrors ] = useState<string[]>([]);
 
     const initiator = useCallback(
         async (requestBody?: Req) => {
@@ -36,11 +37,17 @@ export const useRequest = <Req, Res>(endpoint: Endpoint, method: RequestMethods)
             }
 
             const responseBody = await response.json() as Res;
+
+            if (!isResponseSuccess(response)) {
+                const errorList = (responseBody as unknown as ErrorResponse).errors;
+                setErrors(errorList);
+            }
+
             setIsLoading(false);
             return { response, responseBody };
         },
         [setIsLoading, endpoint]
     );
 
-    return [ isLoading, initiator ];
+    return [ isLoading, errors, initiator ];
 };

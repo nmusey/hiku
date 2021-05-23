@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Form, Input, Row } from "antd";
 import { useHistory } from "react-router-dom";
-import { ErrorResponse, RequestMethods, useRequest } from "../../hooks/useRequest";
+import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { Endpoints } from "../../constants/Endpoints";
 import { RegisterRequest, RegisterResponse } from "../../../../common/dtos/auth/Register";
 import { Pages } from "../../constants/Pages";
@@ -11,8 +11,7 @@ import { ErrorList } from "../ui/ErrorList";
 
 export const RegisterForm = (): JSX.Element => {
     const history = useHistory();
-    const [isLoading, initiator] = useRequest<RegisterRequest, RegisterResponse>(Endpoints.Register, RequestMethods.Post);
-    const [errors, setErrors] = useState<string[]>([]);
+    const [isLoading, errors, initiator] = useRequest<RegisterRequest, RegisterResponse>(Endpoints.Register, RequestMethods.Post);
 
     async function handleFinish(values: Record<string, string>): Promise<void> {
         const requestBody: RegisterRequest = {
@@ -21,14 +20,12 @@ export const RegisterForm = (): JSX.Element => {
             password: values[FieldIds.Password]
         };
 
-        const { response, responseBody } = await initiator(requestBody);
+        const { response } = await initiator(requestBody);
 
         if (isResponseSuccess(response)) {
             history.push(Pages.RegisterSuccess.route);
             return;
         }
-
-        setErrors((responseBody as ErrorResponse).errors);
     }
     
     return (

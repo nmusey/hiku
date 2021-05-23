@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Spin, Typography } from "antd";
 import { Endpoints } from "../../constants/Endpoints";
-import { ErrorResponse, RequestMethods, useRequest } from "../../hooks/useRequest";
+import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../../../common/dtos/auth/ConfirmRegistration";
 import { isResponseSuccess } from "../../utils/fetch.utils";
 import { useHistory } from "react-router";
@@ -14,8 +14,7 @@ interface Props {
 }
 
 export const ConfirmRegistration = (props: Props): JSX.Element => {
-    const [ isLoading, initiator ] = useRequest<ConfirmRegistrationRequest, ConfirmRegistrationResponse>(Endpoints.ConfirmRegistration, RequestMethods.Post);
-    const [ errors, setErrors ] = useState<string[]>([]);
+    const [ isLoading, errors, initiator ] = useRequest<ConfirmRegistrationRequest, ConfirmRegistrationResponse>(Endpoints.ConfirmRegistration, RequestMethods.Post);
     const history = useHistory();
     
     useEffect(() => {
@@ -25,14 +24,12 @@ export const ConfirmRegistration = (props: Props): JSX.Element => {
                 token: props.token
             };
 
-            const { response, responseBody } = await initiator(requestBody);
+            const { response } = await initiator(requestBody);
 
             if (isResponseSuccess(response)) {
                 history.push(Pages.PostList.route);
                 return;
             }
-
-            setErrors((responseBody as ErrorResponse).errors);
         };
 
         confirm();
