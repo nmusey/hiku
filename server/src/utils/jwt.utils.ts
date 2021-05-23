@@ -3,7 +3,7 @@ import { User } from "@prisma/client";
 import { Request, Response } from "express";
 
 const EXPIRY_LENGTH_MINUTES = 30;
-const JWT_HEADER_KEY = "jwt";
+export const JWT_HEADER_KEY = "jwt";
 
 export const generateJWT = (user: User): string => {
     const jwtBody = {
