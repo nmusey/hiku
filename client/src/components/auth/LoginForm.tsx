@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Form, Input, Row, Typography } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
-import { Endpoints } from "../../constants/Endpoints";
+import { Endpoints } from "../../../../common/constants/Endpoints";
 import { LoginRequest, LoginResponse } from "../../../../common/dtos/auth/Login";
 import { Pages } from "../../constants/Pages";
 import { FieldIds } from "../../constants/FieldIds";

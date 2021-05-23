@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Spin, Typography } from "antd";
-import { Endpoints } from "../../constants/Endpoints";
+import { Endpoints } from "../../../../common/constants/Endpoints";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../../../common/dtos/auth/ConfirmRegistration";
 import { isResponseSuccess } from "../../utils/fetch.utils";

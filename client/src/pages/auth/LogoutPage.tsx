@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Endpoints } from "../../constants/Endpoints";
+import { Endpoints } from "../../../../common/constants/Endpoints";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { LogoutRequest, LogoutResponse } from "../../../../common/dtos/auth/Logout";
 import { Pages } from "../../constants/Pages";

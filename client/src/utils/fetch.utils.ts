@@ -1,4 +1,4 @@
-import { Endpoint } from "../constants/Endpoints";
+import { Endpoint } from "../../../common/constants/Endpoints";
 import { getJWT, JWT_KEY, setJWT } from "./jwt.utils";
 import { buildApiEndpoint } from "./url.utils";
 

@@ -1,4 +1,4 @@
-import { Controller } from "../../../common/constants/Controller";
+import { Controller } from "./Controller";
 
 export interface Endpoint {
     controller: Controller;

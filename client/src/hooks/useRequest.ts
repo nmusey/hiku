@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Endpoint } from "../constants/Endpoints";
+import { Endpoint } from "../../../common/constants/Endpoints";
 import { getJSON, isResponseSuccess, postJSON } from "../utils/fetch.utils";
 
 export interface ErrorResponse {
