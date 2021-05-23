@@ -7,7 +7,7 @@ export const Wordmark = (): JSX.Element => {
     }
 
     return (
-        <div onClick={handleClick} className="fill">
+        <div onClick={handleClick} className="fill wordmark">
             <Typography.Title level={1} className="fill center-vertical">
                 Hiku
             </Typography.Title>
