@@ -9,4 +9,5 @@ export const Endpoints: Record<string, Endpoint> = {
     Register: { controller: Controller.Auth, action: "register"},
     ConfirmRegistration: { controller: Controller.Auth, action: "confirmRegistration"},
     Login: {controller: Controller.Auth, action: "login"},
+    Logout: {controller: Controller.Auth, action: "logout"}
 };
