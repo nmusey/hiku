@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response, Router } from "express";
 import { registerValidators } from "../validators/auth/register.validators";
 import { RegisterRequest, RegisterResponse } from "../../../common/dtos/auth/Register";
-import { validationMiddleware } from "../middlewares/validationMiddleware";
+import { validationMiddleware } from "../middlewares/validation.middleware";
 import { comparePasswordToHashed, createRegistrationToken, hashPassword } from "../utils/cryptography.utils";
 import { sendRegistrationEmail } from "../utils/mail.utils";
 import { confirmRegistrationValidators } from "../validators/auth/confirmRegistration.validators";
