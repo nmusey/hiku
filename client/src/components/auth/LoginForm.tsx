@@ -3,27 +3,26 @@ import { Button, Form, Input, Row, Typography } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { Endpoints } from "../../constants/Endpoints";
-import { RegisterRequest, RegisterResponse } from "../../../../common/dtos/auth/Register";
+import { LoginRequest, LoginResponse } from "../../../../common/dtos/auth/Login";
 import { Pages } from "../../constants/Pages";
 import { FieldIds } from "../../constants/FieldIds";
 import { isResponseSuccess } from "../../utils/fetch.utils";
 import { ErrorList } from "../ui/ErrorList";
 
-export const RegisterForm = (): JSX.Element => {
+export const LoginForm = (): JSX.Element => {
     const history = useHistory();
-    const [isLoading, errors, initiator] = useRequest<RegisterRequest, RegisterResponse>(Endpoints.Register, RequestMethods.Post);
+    const [isLoading, errors, initiator] = useRequest<LoginRequest, LoginResponse>(Endpoints.Login, RequestMethods.Post);
 
     async function handleFinish(values: Record<string, string>): Promise<void> {
-        const requestBody: RegisterRequest = {
+        const requestBody: LoginRequest = {
             email: values[FieldIds.Email],
-            username: values[FieldIds.Username],
             password: values[FieldIds.Password]
         };
 
         const { response } = await initiator(requestBody);
 
         if (isResponseSuccess(response)) {
-            history.push(Pages.RegisterSuccess.route);
+            history.push(Pages.PostList.route);
             return;
         }
     }
@@ -36,21 +35,17 @@ export const RegisterForm = (): JSX.Element => {
                     <Input type="email" placeholder="Email"/>
                 </Form.Item>
 
-                <Form.Item name={FieldIds.Username}>
-                    <Input placeholder="Username"/>
-                </Form.Item>
-
                 <Form.Item name={FieldIds.Password }>
                     <Input type="password" placeholder="Password"/>
                 </Form.Item>
 
                 <Row className="fill-horizontal" justify="center">
-                    <Button type="primary" loading={isLoading} htmlType="submit">Register</Button>
+                    <Button type="primary" loading={isLoading} htmlType="submit">Login</Button>
                 </Row>
             </Form>
 
             <Row className="fill-horizontal margin-vertical" justify="center">
-                <Typography>Already have an account? <Link to={Pages.Login.route}>Log in.</Link></Typography>
+                <Typography>Need an account? <Link to={Pages.Register.route}>Register now.</Link></Typography>
             </Row>
         </>
     );
