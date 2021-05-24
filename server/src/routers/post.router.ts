@@ -6,8 +6,8 @@ import { ListPostsResponse } from "../../../common/dtos/post/ListPosts.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validationMiddleware } from "../middlewares/validation.middleware.js";
 import { getUserFromJWT } from "../utils/jwt.utils.js";
-import { createPostValidators } from "../validators/post/CreatePost.js";
-import { listPostsValidators } from "../validators/post/ListPosts.js";
+import { createPostValidators } from "../validators/post/createPost.validators.js";
+import { listPostsValidators } from "../validators/post/listPosts.validators.js";
 
 const prisma = new Prisma.PrismaClient();
 
