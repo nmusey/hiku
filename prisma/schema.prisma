@@ -12,11 +12,11 @@ model User {
   email               String    @unique
   username            String    @unique
   password            String
-  registered          DateTime  @default(now())
+  registeredDate      DateTime  @default(now())
   registrationToken   String       
 
-  posts               Post[]
-  snaps               Snap[]
+  posts               Post[]    @relation("Author")
+  snaps               Post[]    @relation("Snap")
 
   following           User[]    @relation("UserFollows", references: [id])
   followers           User[]    @relation("UserFollows", references: [id])
@@ -29,17 +29,8 @@ model Post {
   secondLine    String
   thirdLine     String
 
-  author        User      @relation(fields: [authorId], references: [id])
+  author        User      @relation("Author", fields: [authorId], references: [id])
   authorId      Int
-  snaps         Snap[]
-  snapIds       Int[]
-}
 
-model Snap {
-  id              Int   @id @default(autoincrement())
-
-  snapper         User  @relation(fields: [snapperId], references: [id])
-  snapperId       Int
-  snappedPost     Post  @relation(fields: [snappedPostId], references: [id])
-  snappedPostId   Int
+  snappers      User[]    @relation("Snap")
 }
