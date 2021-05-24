@@ -81,7 +81,8 @@ postRouter.post("/" + Endpoints.CreatePost.action, createPostValidators, validat
         }
     });
 
-    res.sendStatus(200);
+    const responseBody = {};
+    res.json(responseBody);
 });
 
 postRouter.post("/" + Endpoints.Snap.action, snapValidators, validationMiddleware, async (req: Request, res: Response) => {

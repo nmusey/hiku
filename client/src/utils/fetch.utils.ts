@@ -1,4 +1,5 @@
 import { Endpoint } from "../../../common/constants/Endpoints";
+import { Pages } from "../constants/Pages";
 import { getJWT, JWT_KEY, setJWT } from "./jwt.utils";
 import { buildApiEndpoint } from "./url.utils";
 
@@ -23,6 +24,10 @@ export const postJSON = async (endpoint: Endpoint, body = {}): Promise<Response>
     const response = await fetch(url, requestInit);
     setJWT(response.headers.get(JWT_KEY));
 
+    if (response.status === 401) {
+        window.location.hash = Pages.Login.route;
+    }
+
     return response;
 };
 
@@ -37,6 +42,10 @@ export const getJSON = async (endpoint: Endpoint, params?: Record<string, unknow
 
     const response = await fetch(url, requestInit);
     setJWT(response.headers.get(JWT_KEY));
+
+    if (response.status === 401) {
+        window.location.hash = Pages.Login.route;
+    }
 
     return response;
 };

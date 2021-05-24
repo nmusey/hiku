@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Divider, Form, Input, Modal, Spin, Typography } from "antd";
+import React from "react";
+import { Form, Input, message, Modal, Spin } from "antd";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { Endpoints } from "../../../../common/constants/Endpoints";
 import { ErrorList } from "../ui/ErrorList";
 import { FieldIds } from "../../constants/FieldIds";
 import { CreatePostRequest, CreatePostResponse } from "../../../../common/dtos/post/CreatePost";
 import { isResponseSuccess } from "../../utils/fetch.utils";
+import { useForm } from "antd/lib/form/Form";
 
 interface Props {
     visible: boolean;
@@ -13,28 +14,23 @@ interface Props {
 }
 
 export const CreatePostModal = (props: Props): JSX.Element => {
-    const [isLoading, errors, initiator] = useRequest<CreatePostRequest, CreatePostResponse>(Endpoints.CreatePost, RequestMethods.Post);
-
-    const [firstLine, setFirstLine] = useState("");
-    const [secondLine, setSecondLine] = useState("");
-    const [thirdLine, setThirdLine] = useState("");
+    const [ isLoading, errors, initiator ] = useRequest<CreatePostRequest, CreatePostResponse>(Endpoints.CreatePost, RequestMethods.Post);
+    const [ form ] = useForm();
 
     async function handleSubmit(): Promise<void> {
-        const requestBody: CreatePostRequest = { firstLine, secondLine, thirdLine };
-        
-        const firstLineCopy = firstLine;
-        const secondLineCopy = secondLine;
-        const thirdLineCopy = thirdLine;
+        const requestBody: CreatePostRequest = { 
+            firstLine: form.getFieldValue(FieldIds.FirstLine), 
+            secondLine: form.getFieldValue(FieldIds.SecondLine), 
+            thirdLine: form.getFieldValue(FieldIds.ThirdLine)
+        };
 
         const { response } = await initiator(requestBody);
 
         if (isResponseSuccess(response)) {
+            form.resetFields();
+            message.success("Your haiku was posted successfully. Please refresh the page if you'd like to see it.", 5);
             props.closeModal();
         }
-
-        setFirstLine(firstLineCopy);
-        setSecondLine(secondLineCopy);
-        setThirdLine(thirdLineCopy);
     }
 
     return (
@@ -44,40 +40,25 @@ export const CreatePostModal = (props: Props): JSX.Element => {
             onOk={handleSubmit}
             cancelText="Close"
             okText="Post"
+            title="Create a new haiku"
         >
-            <Typography.Title level={3}>Create a new haiku</Typography.Title>
-
-            <Divider />
-
             <ErrorList errors={errors} />
             {
                 isLoading ?
                 <Spin /> :
-                <Form layout="vertical">
-                <Form.Item name={FieldIds.FirstLine}>
-                    <Input 
-                        placeholder="Your first line goes here"
-                        value={firstLine} 
-                        onChange={(event) => setFirstLine(event.target.value)}
-                    />
-                </Form.Item>
+                <Form layout="vertical" form={form}>
+                    <Form.Item name={FieldIds.FirstLine}>
+                        <Input placeholder="Your first line goes here" />
+                    </Form.Item>
 
-                <Form.Item name={FieldIds.SecondLine}>
-                    <Input 
-                        placeholder="And then your second one here"
-                        value={secondLine} 
-                        onChange={(event) => setSecondLine(event.target.value)}
-                    />
-                </Form.Item>
+                    <Form.Item name={FieldIds.SecondLine}>
+                        <Input placeholder="And then your second one here" />
+                    </Form.Item>
 
-                <Form.Item name={FieldIds.ThirdLine}>
-                    <Input 
-                        placeholder="Then wrap it up here"
-                        value={thirdLine} 
-                        onChange={(event) => setThirdLine(event.target.value)}
-                    />
-                </Form.Item>
-            </Form>
+                    <Form.Item name={FieldIds.ThirdLine}>
+                        <Input placeholder="Then wrap it up here" />
+                    </Form.Item>
+                </Form>
             }
         </Modal>
     );

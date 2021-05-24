@@ -14,18 +14,21 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
 
     const [isWideWindow, setIsWideWindow] = useState(window.innerWidth > MOBILE_BREAKPOINT);
     const [createPostModalOpen, setCreatePostModalOpen] = useState(false);
-
-    useAuthentication();
-
+    
     useEffect(() => {
-        window.addEventListener("resize", () => {
+        function resizeHandler() {
             setIsWideWindow(window.innerWidth > MOBILE_BREAKPOINT);
-        });
+        }
+
+        window.addEventListener("resize", resizeHandler);
+        return () => window.removeEventListener("resize", resizeHandler);
     }, []);
+    
+    useAuthentication();
 
     const ModalContainer = (
         <>
-            <CreatePostModal visible={createPostModalOpen} closeModal={() => setCreatePostModalOpen(false)}/>
+            <CreatePostModal visible={createPostModalOpen} closeModal={() => setCreatePostModalOpen(false) }/>
         </>
     );
 

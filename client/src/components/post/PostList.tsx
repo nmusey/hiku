@@ -17,10 +17,6 @@ export const PostList = (): JSX.Element => {
 
     const userId = readJWT()?.id;
 
-    if (!userId) {
-        return <></>;
-    }
-
     async function loadPosts(): Promise<void> {
         if (allPostsLoaded || isLoading) {
             return;
@@ -44,12 +40,16 @@ export const PostList = (): JSX.Element => {
         loadPosts();
     }, []);
 
+    if (!userId) {
+        return <></>;
+    }
+
     return !isLoading && allPostsLoaded && loadedPosts.length === 0 ? 
         <Row justify="center" className="fill">There are no haikus to show. Try following somebody to see their posts.</Row> :
         (
                 <List
                     dataSource={loadedPosts} 
-                    loadMore={<Row justify="center"><LoadMore loadMore={loadPosts} /></Row>}
+                    loadMore={allPostsLoaded && <Row justify="center"><LoadMore loadMore={loadPosts} /></Row>}
                     renderItem={(post) => <PostListItem post={post} userId={userId}/>}
                     loading={isLoading}
                     className="fill-horizontal"
