@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert } from "antd";
 
-export interface Props {
+interface Props {
     errors: string[];
 }
 

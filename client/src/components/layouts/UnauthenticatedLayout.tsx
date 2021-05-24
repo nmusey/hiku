@@ -2,7 +2,7 @@ import React from "react";
 import { Layout, Row } from "antd";
 import { Wordmark } from "../ui/Wordmark";
 
-export interface Props {
+interface Props {
     children: React.ReactNode;
 }
 

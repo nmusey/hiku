@@ -4,7 +4,7 @@ import { Navbar } from "../ui/Navbar";
 import { useAuthentication } from "../../hooks/useAuthentication";
 import { CreatePostModal } from "../post/CreatePostModal";
 
-export interface Props {
+interface Props {
     children: React.ReactNode;
 }
 
