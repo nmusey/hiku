@@ -16,7 +16,7 @@ export const postRouter = Router();
 postRouter.use(authMiddleware);
 
 postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validationMiddleware, async (req: Request, res: Response) => {
-    const POSTS_PER_REQUEST = 2;
+    const POSTS_PER_REQUEST = 5;
     const userId = getUserFromJWT(req)!.id;
 
     const cursor = parseInt(req.query.cursor as string);

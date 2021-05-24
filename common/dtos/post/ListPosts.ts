@@ -1,6 +1,6 @@
-import { Post } from "@prisma/client";
+import { PostWithAuthor } from "../../types/PostWithAuthor";
 
 export interface ListPostsResponse {
-    posts: Post[];
+    posts: PostWithAuthor[];
     cursor: number;
 }
