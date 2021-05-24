@@ -12,8 +12,8 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
     const MOBILE_BREAKPOINT = 768;
     const { Content } = Layout;
 
-    const [isWideWindow, setIsWideWindow] = useState(window.innerWidth > MOBILE_BREAKPOINT);
-    const [createPostModalOpen, setCreatePostModalOpen] = useState(false);
+    const [ isWideWindow, setIsWideWindow ] = useState(window.innerWidth > MOBILE_BREAKPOINT);
+    const [ isCreatePostModalOpen, setIsCreatePostModalOpen ] = useState(false);
     
     useEffect(() => {
         function resizeHandler() {
@@ -28,19 +28,28 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
 
     const ModalContainer = (
         <>
-            <CreatePostModal visible={createPostModalOpen} closeModal={() => setCreatePostModalOpen(false) }/>
+            <CreatePostModal visible={isCreatePostModalOpen} closeModal={() => setIsCreatePostModalOpen(false) }/>
         </>
     );
 
+    const Main = (
+        <Content className="fill center-vertical" id="main-container">
+            {
+                props.children
+            }
+        </Content>
+    );
+
+
+
     const mobileLayout = (
         <Layout className="fill">
-            <Content className="fill center-vertical">
-                {
-                    props.children
-                }
-            </Content>
+            { Main }
             <Row justify="space-around" align="middle" className="fill">
-                <Navbar openCreatePostModal={() => setCreatePostModalOpen(true)} />
+                <Navbar 
+                    openCreatePostModal={() => setIsCreatePostModalOpen(true)} 
+                    position="bottom"
+                />
             </Row>
             { ModalContainer }
         </Layout>
@@ -49,13 +58,12 @@ export const AuthenticatedLayout = (props: Props): JSX.Element => {
     const desktopLayout = (
         <Layout className="fill">
             <Row justify="space-around" align="middle" className="fill">
-                <Navbar openCreatePostModal={() => setCreatePostModalOpen(true)} />
+                <Navbar 
+                    openCreatePostModal={() => setIsCreatePostModalOpen(true)} 
+                    position="top"
+                />
             </Row>
-            <Content className="fill center-vertical">
-                {
-                    props.children
-                }
-            </Content>
+            { Main }
             { ModalContainer }
         </Layout>
     );

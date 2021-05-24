@@ -21,3 +21,5 @@ export const Pages: Record<string, Page> = {
     ConfirmRegistration: { name: "Confirm Registration", route: "/auth/confirmRegistration", component: <ConfirmRegistrationPage />, authenticated: false},
     PostList:            { name: "Posts",                route: "/posts",                    component: <PostListPage />,            authenticated: true},
 };
+
+export const HomePage = Pages.PostList;

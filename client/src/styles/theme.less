@@ -17,6 +17,8 @@
 @white: #F1F1EA;
 @black: #343330;
 
+@padding-xl: 40px;
+
 
 /* Global */
 @body-background: @white;
@@ -26,7 +28,7 @@
 /* Layout */
 @layout-body-background: @white;
 @layout-header-background: @primary-color;
-@layout-header-padding: 0 calc(24px + @layout-content-padding);
+@layout-header-padding: 0 calc(@padding-lg + @layout-content-padding);
 
 
 /* Menu */
@@ -41,16 +43,23 @@
 
 /* Overwrites */
 
-@layout-content-padding: 16px;
+@layout-content-padding: @padding-md;
 
 
 
 /* Styles */ 
 
-nav {
+nav.navbar {
+    position: fixed;
+    height: @layout-header-height;
     background-color: @primary-color;
-    padding: 16px 40px;
-    box-sizing: content-box;
+    padding: @padding-md @padding-xl;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.navbar-filler {
+    height: @layout-header-height;
 }
 
 .ant-layout {
@@ -62,7 +71,7 @@ nav {
 }
 
 .ant-alert {
-    margin: 16px 0;
+    margin: @margin-md 0;
 }
 
 .ant-alert-content {
@@ -71,7 +80,7 @@ nav {
 }
 
 .ant-card {
-    margin: 16px;
+    margin: @margin-md;
 }
 
 .wordmark {
@@ -81,5 +90,9 @@ nav {
 .haiku-display-item {
     display: flex;
     justify-content: center;
-    padding: 32px;
+    padding: @padding-xl;
+}
+
+#search-return-button {
+    margin-bottom: 24px;
 }

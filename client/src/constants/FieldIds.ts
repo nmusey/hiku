@@ -5,5 +5,7 @@ export const FieldIds: Record<string, string> = {
 
     FirstLine: "firstLine",
     SecondLine: "secondLine",
-    ThirdLine: "thirdLine"
+    ThirdLine: "thirdLine",
+
+    Search: "search"
 };
