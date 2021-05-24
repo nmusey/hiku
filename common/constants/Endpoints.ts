@@ -1,6 +1,7 @@
 export enum Controller {
     Auth = "auth",
-    Post = "post"
+    Post = "post",
+    User = "user"
 }
 
 export interface Endpoint {
@@ -9,13 +10,15 @@ export interface Endpoint {
 }
 
 export const Endpoints: Record<string, Endpoint> = {
-    Register: { controller: Controller.Auth, action: "register"},
-    ConfirmRegistration: { controller: Controller.Auth, action: "confirmRegistration"},
-    Login: {controller: Controller.Auth, action: "login"},
-    Logout: {controller: Controller.Auth, action: "logout"},
+    Register: { controller: Controller.Auth, action: "register" },
+    ConfirmRegistration: { controller: Controller.Auth, action: "confirmRegistration" },
+    Login: {controller: Controller.Auth, action: "login" },
+    Logout: {controller: Controller.Auth, action: "logout" },
 
-    ListPosts: { controller: Controller.Post, action: ""},
-    CreatePost: { controller: Controller.Post, action: "create"},
+    ListPosts: { controller: Controller.Post, action: "" },
+    CreatePost: { controller: Controller.Post, action: "create" },
     Snap: { controller: Controller.Post, action: "snap" },
-    Unsnap: { controller: Controller.Post, action: "unsnap" }
+    Unsnap: { controller: Controller.Post, action: "unsnap" },
+
+    Search: { controller: Controller.User, action: "search" }
 };
