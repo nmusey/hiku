@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Endpoint } from "../../../common/constants/Endpoints";
-import { getJSON, isResponseSuccess, postJSON } from "../utils/fetch.utils";
+import { getJSON, getJSONWithParams, isResponseSuccess, postJSON } from "../utils/fetch.utils";
 
 export interface ErrorResponse {
     errors: string[];
@@ -8,7 +8,8 @@ export interface ErrorResponse {
 
 export enum RequestMethods {
     Get = "GET",
-    Post = "POST"
+    Post = "POST",
+    GetWithParams = "GET_WITH_PARAMS"
 }
 
 interface UseRequestReturn<T> {
@@ -28,7 +29,10 @@ export const useRequest = <Req, Res>(endpoint: Endpoint, method: RequestMethods)
 
             switch (method) {
                 case RequestMethods.Get:
-                    response = await getJSON(endpoint);
+                    response = await getJSON(endpoint, requestBody as Record<string, unknown>);
+                    break;
+                case RequestMethods.GetWithParams:
+                    response = await getJSONWithParams(endpoint, requestBody as unknown as Record<string, string>);
                     break;
                 case RequestMethods.Post:
                 default:

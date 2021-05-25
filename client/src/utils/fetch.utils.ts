@@ -31,14 +31,39 @@ export const postJSON = async (endpoint: Endpoint, body = {}): Promise<Response>
     return response;
 };
 
-export const getJSON = async (endpoint: Endpoint, params?: Record<string, unknown>): Promise<Response> => {
+export const getJSON = async (endpoint: Endpoint, queryParams?: Record<string, unknown>): Promise<Response> => {
     const requestInit = buildRequestInit("GET");
     let url = buildApiEndpoint(endpoint);
 
-    if (params) {
+    if (queryParams) {
         url += "?";
-        url += Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
+        url += Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join("&");
     }
+
+    const response = await fetch(url, requestInit);
+    setJWT(response.headers.get(JWT_KEY));
+
+    if (response.status === 401) {
+        window.location.hash = Pages.Login.route;
+    }
+
+    return response;
+};
+
+export const getJSONWithParams = async (endpoint: Endpoint, params?: Record<string, string>): Promise<Response> => {
+    const requestInit = buildRequestInit("GET");
+    let action = endpoint.action;
+
+    if (params) {
+        Object.keys(params).forEach(key => {
+            action = endpoint.action.replace(
+                `:${key}`, 
+                params[key]
+            );
+        });
+    }
+
+    let url = buildApiEndpoint({ ...endpoint, action });
 
     const response = await fetch(url, requestInit);
     setJWT(response.headers.get(JWT_KEY));
