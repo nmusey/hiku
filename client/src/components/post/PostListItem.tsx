@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, List, Row, Typography } from "antd";
+import { Button, Card, List, Row, Space, Typography } from "antd";
 import { Post } from "@prisma/client";
 import { Author, Snappers } from "../../../../common/types/PostTypes";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
@@ -36,34 +36,46 @@ export const PostListItem = (props: Props): JSX.Element => {
     }
 
     return (
-        <List.Item className="center-horizontal" >
+        <List.Item className="center-horizontal fill-horizontal" >
             <Card 
                 hoverable 
                 className="haiku-display-item"
                 onMouseEnter={() => setIsHovering(true)} 
                 onMouseLeave={() => setIsHovering(false)}
             >
-                <ErrorList errors={snapErrors.concat(unsnapErrors)} />
+                <Space direction="vertical" size="middle">
+                    <ErrorList errors={snapErrors.concat(unsnapErrors)} />
 
-                <Row justify="center" wrap><Typography.Text strong>{ props.post.firstLine }</Typography.Text></Row>
-                <Row justify="center" wrap><Typography.Text strong>{ props.post.firstLine }</Typography.Text></Row>
-                <Row justify="center" wrap><Typography.Text strong>{ props.post.firstLine }</Typography.Text></Row>
-                
-                {
-                    isHovering &&
-                    <>
-                        <Row justify="center" wrap>- {props.post.author.username}</Row>
-                        <Row justify="center" wrap>
-                            <Button 
-                                loading={isSnapLoading || isUnsnapLoading}
-                                onClick={handleClick}
-                                type={hasSnapped ? "primary" : "default"}
-                            >
-                                    &#128076;
-                            </Button>
-                        </Row>
-                    </>
-                }
+                    <Row justify="center" wrap className="fill-horizontal">
+                        <Typography.Text strong>{ props.post.firstLine }</Typography.Text>
+                    </Row>
+                    <Row justify="center" wrap className="fill-horizontal">
+                        <Typography.Text strong>{ props.post.firstLine }</Typography.Text>
+                    </Row>
+                    <Row justify="center" wrap className="fill-horizontal">
+                        <Typography.Text strong>{ props.post.firstLine }</Typography.Text>
+                    </Row>
+                    
+                    {
+                        isHovering &&
+                        <>
+                            <Row justify="center" wrap>
+                                <Typography.Text type="secondary">
+                                    - {props.post.author.username}
+                                </Typography.Text>
+                            </Row>
+                            <Row justify="center" wrap>
+                                <Button 
+                                    loading={isSnapLoading || isUnsnapLoading}
+                                    onClick={handleClick}
+                                    type={hasSnapped ? "primary" : "default"}
+                                >
+                                        &#128076;
+                                </Button>
+                            </Row>
+                        </>
+                    }
+                </Space>
             </Card>
         </List.Item>
     );

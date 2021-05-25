@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Row, Spin, Typography } from "antd";
+import { Button, Card, Row, Space, Spin, Typography } from "antd";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { UserInfo } from "../../../../common/types/UserInfo";
 import { Endpoints } from "../../../../common/constants/Endpoints";
@@ -40,26 +40,28 @@ export const UserDetail = (props: Props): JSX.Element => {
                 isLoading || !user ? 
                 <Spin className="center-horizontal" /> : 
                 (
-                    <Card className="fill center" hoverable>
-                        <Row justify="center" className="fill-horizontal">
-                            <Typography.Title level={3}>{user!.username}</Typography.Title>
-                        </Row>
-                        <Row justify="center" className="fill-horizontal">
-                            <Typography.Text type="secondary">Followers: {user!.followers}</Typography.Text>
-                        </Row>
-                        {
-                            user.following ?
-                                (
-                                    <Row justify="center" className="fill-horizontal">
-                                        <Typography.Text type="secondary">Following: {user!.following}</Typography.Text>
-                                    </Row>
-                                ) : null
-                        }
-                        {
-                            props.username === currentUsername ?
-                                <Button type="primary" onClick={() => history.push(Pages.Logout.route)}>Logout</Button> :
-                                <FollowButton isFollowing={user.doesCurrentUserFollow} userId={user!.id} />
-                        }
+                    <Card className="fill center">
+                        <Space direction="vertical" size="middle">
+                            <Row justify="center" className="fill-horizontal">
+                                <Typography.Title level={3}>{user!.username}</Typography.Title>
+                            </Row>
+                            <Row justify="center" className="fill-horizontal">
+                                <Typography.Text type="secondary">Followers: {user!.followers}</Typography.Text>
+                            </Row>
+                            {
+                                user.following ?
+                                    (
+                                        <Row justify="center" className="fill-horizontal">
+                                            <Typography.Text type="secondary">Following: {user!.following}</Typography.Text>
+                                        </Row>
+                                    ) : null
+                            }
+                            {
+                                props.username === currentUsername ?
+                                    <Button type="primary" onClick={() => history.push(Pages.Logout.route)}>Logout</Button> :
+                                    <FollowButton isFollowing={user.doesCurrentUserFollow} userId={user!.id} />
+                            }
+                        </Space>
                     </Card>
                 )
             }
