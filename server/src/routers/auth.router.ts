@@ -62,7 +62,16 @@ authRouter.post("/" + Endpoints.ConfirmRegistration.action, confirmRegistrationV
     }
 
     if (!user.registrationToken) {
-        return res.status(400).json({ errors: [ "Your account has already been confirmed. Login to continue." ] });
+        const responseBody = {
+            id: user.id,
+            username: user.username,
+            followers: 0,
+            doesCurrentUserFollow: false
+        } as ConfirmRegistrationResponse;
+
+        setJwt(res, user);     
+
+        return res.status(204).json(responseBody);
     }
 
     if (user.registrationToken === token) {
