@@ -32,7 +32,6 @@ export const sendRegistrationEmail = async (toAddress: string, username: string,
 
     try {
         await transport.sendMail(mailOptions);
-        console.log(`Sent registration email to ${toAddress}`);
         return true;
     } catch (err) {
         console.error(`Error sending email to ${toAddress}: ${err.message}`);

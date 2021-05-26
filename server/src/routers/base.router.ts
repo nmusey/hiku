@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { serveStaticFile } from "../utils/response.utils.js";
+import { resolve } from "path";
+import { STATIC_PATH } from "../constants/Paths.js";
 
 export const baseRouter = Router();
 
 baseRouter.get("/", (req, res) => {
-    serveStaticFile(res, "index.html");
+    res.render(
+        resolve(STATIC_PATH, "index.html")
+    );
 });
 
 baseRouter.get("*", (req, res) => {

@@ -13,8 +13,6 @@ import { userRouter } from "./routers/user.router.js";
 import { Server } from "./server/Server.js";
 import { Controller } from "../../common/constants/Endpoints.js";
 
-const PORT = parseInt(process.env.PORT || "3000");
-
 const server = new Server(STATIC_PATH);
 
 server.addRouter(authRouter, `/api/${Controller.Auth}`);
@@ -22,4 +20,4 @@ server.addRouter(postRouter, `/api/${Controller.Post}`);
 server.addRouter(userRouter, `/api/${Controller.User}`);
 server.addRouter(baseRouter, "");
 
-server.start(PORT);
+server.start();

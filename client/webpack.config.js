@@ -33,7 +33,7 @@ export default {
             {
                 enforce: "pre",
                 test: /\.js$/,
-                loader: "source-map-loader",
+                loader: isDevelopment ? "source-map-loader" : null,
             },
             {
                 test: /\.less$/,
@@ -58,14 +58,16 @@ export default {
             },
             {
                 test: /\.(jpeg|png|gif|svg)$/,
-                type: 'asset/resource'
+                type: "asset/resource"
             }
         ],
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: resolve(currentDirectory, "assets", "index.html"),
-            favicon: resolve(currentDirectory, "assets", "favicon", "favicon.ico")
+            filename: resolve(currentDirectory, "..", "build", "client", "index.html"),
+            favicon:  resolve(currentDirectory, "assets", "favicon", "favicon.ico"),
+            inject: true
         }),
         new CleanWebpackPlugin()
     ],

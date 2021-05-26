@@ -6,8 +6,6 @@ export const authMiddleware: RequestHandler = (req, res, next): void => {
     const user = decodeJWT(jwt);
 
     if (!jwt || !user) {
-        console.log(`Unauthorized attempt to hit ${req.originalUrl}`);
-
         res.status(401).send({ errors: [ "You are not authorized to perform that action. Please try logging in." ] });
         return;
     }
