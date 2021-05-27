@@ -5,13 +5,10 @@ import { Pages } from "../../constants/Pages";
 export const Router = (): JSX.Element => (
     <HashRouter>
         <Switch>
-            <Route exact path="/">
-                Landing page
-            </Route>
             {
                 Object.values(Pages)
                     .map(page => (
-                        <Route path={page.route} key={page.route}>
+                        <Route exact path={page.route} key={page.route}>
                             {
                                 page.component
                             }
