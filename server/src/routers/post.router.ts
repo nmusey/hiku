@@ -73,7 +73,7 @@ postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validation
         cursor: allPosts[POSTS_PER_REQUEST - 1]?.id || 0
     };
 
-    res.json(responseBody);
+    return res.json(responseBody);
 });
 
 postRouter.get("/" + Endpoints.ListUserPosts.action, listUserPostsValidators, validationMiddleware, async (req: Request, res: Response) => {
@@ -145,7 +145,7 @@ postRouter.post("/" + Endpoints.Snap.action, snapValidators, validationMiddlewar
     const initialPost = await prisma.post.findUnique({ where: { id: postId } });
 
     if (!initialPost) {
-        res.status(404).send({ errors: ["Please snap an existing post."] })
+        return res.status(404).send({ errors: ["Please snap an existing post."] })
     }
 
     const updatedPost = await prisma.post.update({
@@ -174,7 +174,7 @@ postRouter.post("/" + Endpoints.Snap.action, snapValidators, validationMiddlewar
 
     const post = mapPostToPostInfo(updatedPost as PostWithConnectedData, userId)
     const responseBody: SnapResponse = { post };
-    res.json(responseBody);
+    return res.json(responseBody);
 });
 
 postRouter.post("/" + Endpoints.Unsnap.action, unsnapValidators, validationMiddleware, async (req: Request, res: Response) => {
@@ -184,7 +184,7 @@ postRouter.post("/" + Endpoints.Unsnap.action, unsnapValidators, validationMiddl
     const initialPost = await prisma.post.findUnique({ where: { id: postId } });
 
     if (!initialPost) {
-        res.status(404).send({ errors: ["Please unsnap an existing post."] })
+        return res.status(404).send({ errors: ["Please unsnap an existing post."] })
     }
 
     const updatedPost = await prisma.post.update({
@@ -213,5 +213,5 @@ postRouter.post("/" + Endpoints.Unsnap.action, unsnapValidators, validationMiddl
 
     const post = mapPostToPostInfo(updatedPost as PostWithConnectedData, userId)
     const responseBody: UnsnapResponse = { post };
-    res.json(responseBody);
+    return res.json(responseBody);
 });

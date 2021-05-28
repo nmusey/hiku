@@ -31,11 +31,6 @@ export default {
                 exclude: /node_modules/
             },
             {
-                enforce: "pre",
-                test: /\.js$/,
-                loader: isDevelopment ? "source-map-loader" : null,
-            },
-            {
                 test: /\.less$/,
                 include: [
                     resolve(currentDirectory, "src", "styles"), 
