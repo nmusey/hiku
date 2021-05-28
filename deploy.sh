@@ -7,6 +7,7 @@ HIKU_ADDRESS=${HIKU_USER}@hiku.ca
 ssh ${HIKU_ADDRESS} -f pm2 stop hiku
 echo "Server stopped."
 
+ssh ${HIKU_ADDRESS} -f rm -rf ~/hiku/build
 scp -r ./build ${HIKU_ADDRESS}:~/hiku
 scp ./package.json ${HIKU_ADDRESS}:~/hiku
 scp ./.env.example ${HIKU_ADDRESS}:~/hiku
