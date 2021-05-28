@@ -22,7 +22,7 @@ export const postRouter = Router();
 
 postRouter.use(authMiddleware);
 
-const POSTS_PER_REQUEST = 2;
+const POSTS_PER_REQUEST = 6;
 
 postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validationMiddleware, async (req: Request, res: Response) => {
     const userId = getUserFromJWT(req)!.id;
