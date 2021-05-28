@@ -35,8 +35,8 @@ userRouter.post("/" + Endpoints.Search.action, searchValidators, validationMiddl
             followers: true
         },
         take: USERS_PER_SEARCH,
-        cursor: cursor == 1 ? undefined : { id: cursor },
-        skip: cursor == 1 ? 0 : 1
+        cursor: cursor === 1 ? undefined : { id: cursor },
+        skip: cursor === 1 ? 0 : 1
     });
 
     const users: UserInfo[] = searchResults.map(user => {

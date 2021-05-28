@@ -3,13 +3,16 @@ import { Request, Response, Router } from "express";
 import { Endpoints } from "../../../common/constants/Endpoints.js";
 import { CreatePostRequest } from "../../../common/dtos/post/CreatePost.js";
 import { ListPostsResponse } from "../../../common/dtos/post/ListPosts.js";
+import { ListUserPostsResponse } from "../../../common/dtos/post/ListUserPosts.js";
 import { SnapRequest, SnapResponse } from "../../../common/dtos/post/Snap.js";
 import { UnsnapRequest, UnsnapResponse } from "../../../common/dtos/post/Unsnap.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validationMiddleware } from "../middlewares/validation.middleware.js";
 import { getUserFromJWT } from "../utils/jwt.utils.js";
+import { mapPostToPostInfo, PostWithConnectedData } from "../utils/post.utils.js";
 import { createPostValidators } from "../validators/post/createPost.validators.js";
 import { listPostsValidators } from "../validators/post/listPosts.validators.js";
+import { listUserPostsValidators } from "../validators/post/listUserPosts.validator.js";
 import { snapValidators } from "../validators/post/snap.validators.js";
 import { unsnapValidators } from "../validators/post/unsnap.validators.js";
 
@@ -19,11 +22,17 @@ export const postRouter = Router();
 
 postRouter.use(authMiddleware);
 
+const POSTS_PER_REQUEST = 2;
+
 postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validationMiddleware, async (req: Request, res: Response) => {
-    const POSTS_PER_REQUEST = 5;
     const userId = getUserFromJWT(req)!.id;
 
-    const cursor = parseInt(req.query.cursor as string);
+    let parsedCursor: number;
+    try {
+        parsedCursor = parseInt(req.query.cursor as string);
+    } catch {
+        return res.status(400).send({ errors: ["User id and cursor must be integers."] });
+    }
 
     const followingWithIds = await prisma.user.findUnique({
         where: { id: userId },
@@ -35,11 +44,12 @@ postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validation
     });
 
     const followingIds = followingWithIds?.following.map(container => container.id);
-    const posts = await prisma.post.findMany({
+    const allPosts = await prisma.post.findMany({
         include: {
             author: {
                 select: {
-                    username: true
+                    username: true,
+                    id: true
                 }
             },
             snappers: {
@@ -53,16 +63,59 @@ postRouter.get("/" + Endpoints.ListPosts.action, listPostsValidators, validation
         },
         orderBy: { createdAt: "desc" },
         take: POSTS_PER_REQUEST,
-        skip: cursor === 1 ? 0 : 1,
-        cursor: cursor === 1 ? undefined : { id: cursor }
+        skip: parsedCursor === 1 ? 0 : 1,
+        cursor: parsedCursor === 1 ? undefined : { id: parsedCursor }
     });
 
+    const posts = allPosts.map(post => mapPostToPostInfo(post as PostWithConnectedData, userId));
     const responseBody: ListPostsResponse = {
         posts,
-        cursor: posts[POSTS_PER_REQUEST - 1]?.id || -1
+        cursor: allPosts[POSTS_PER_REQUEST - 1]?.id || 0
     };
 
     res.json(responseBody);
+});
+
+postRouter.get("/" + Endpoints.ListUserPosts.action, listUserPostsValidators, validationMiddleware, async (req: Request, res: Response) => {
+    const { username, cursor } = req.params;
+    const userId = getUserFromJWT(req)!.id;
+
+    let parsedCursor: number;
+    try {
+        parsedCursor = parseInt(cursor as string);
+    } catch {
+        return res.status(400).send({ errors: ["User id and cursor must be integers."] });
+    }
+
+    const allPosts = await prisma.post.findMany({
+        include: {
+            author: {
+                select: {
+                    username: true,
+                    id: true
+                }
+            },
+            snappers: {
+                select: {
+                    id: true
+                }
+            }
+        },
+        where: { 
+            author: { username } 
+        },
+        orderBy: { createdAt: "desc" },
+        take: POSTS_PER_REQUEST,
+        skip: parsedCursor === 1 ? 0 : 1,
+        cursor: parsedCursor === 1 ? undefined : { id: parsedCursor }
+    });
+
+    const posts = allPosts.map(post => mapPostToPostInfo(post as PostWithConnectedData, userId));
+    const responseBody = {
+        posts, 
+        cursor: posts[POSTS_PER_REQUEST - 1]?.id || 0 
+    } as ListUserPostsResponse;
+    return res.json(responseBody);
 });
 
 postRouter.post("/" + Endpoints.CreatePost.action, createPostValidators, validationMiddleware, async (req: Request, res: Response) => {
@@ -89,9 +142,9 @@ postRouter.post("/" + Endpoints.Snap.action, snapValidators, validationMiddlewar
     const { postId } = req.body as SnapRequest;
     const userId = getUserFromJWT(req)!.id;
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    const post = await prisma.post.findUnique({ where: { id: postId } });
+    const initialPost = await prisma.post.findUnique({ where: { id: postId } });
 
-    if (!post) {
+    if (!initialPost) {
         res.status(404).send({ errors: ["Please snap an existing post."] })
     }
 
@@ -107,7 +160,8 @@ postRouter.post("/" + Endpoints.Snap.action, snapValidators, validationMiddlewar
         include: {
             author: {
                 select: {
-                    username: true
+                    username: true,
+                    id: true
                 }
             },
             snappers: {
@@ -118,7 +172,8 @@ postRouter.post("/" + Endpoints.Snap.action, snapValidators, validationMiddlewar
         }
     });
 
-    const responseBody: SnapResponse = { post: updatedPost };
+    const post = mapPostToPostInfo(updatedPost as PostWithConnectedData, userId)
+    const responseBody: SnapResponse = { post };
     res.json(responseBody);
 });
 
@@ -126,9 +181,9 @@ postRouter.post("/" + Endpoints.Unsnap.action, unsnapValidators, validationMiddl
     const { postId } = req.body as UnsnapRequest;
     const userId = getUserFromJWT(req)!.id;
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    const post = await prisma.post.findUnique({ where: { id: postId } });
+    const initialPost = await prisma.post.findUnique({ where: { id: postId } });
 
-    if (!post) {
+    if (!initialPost) {
         res.status(404).send({ errors: ["Please unsnap an existing post."] })
     }
 
@@ -144,7 +199,8 @@ postRouter.post("/" + Endpoints.Unsnap.action, unsnapValidators, validationMiddl
         include: {
             author: {
                 select: {
-                    username: true
+                    username: true,
+                    id: true
                 }
             },
             snappers: {
@@ -155,6 +211,7 @@ postRouter.post("/" + Endpoints.Unsnap.action, unsnapValidators, validationMiddl
         }
     });
 
-    const responseBody: UnsnapResponse = { post: updatedPost };
+    const post = mapPostToPostInfo(updatedPost as PostWithConnectedData, userId)
+    const responseBody: UnsnapResponse = { post };
     res.json(responseBody);
 });

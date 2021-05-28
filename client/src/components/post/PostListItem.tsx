@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, List, Row, Space, Typography } from "antd";
-import { Post } from "@prisma/client";
-import { Author, Snappers } from "../../../../common/types/PostTypes";
+import { PostInfo } from "../../../../common/types/PostTypes";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
 import { SnapRequest, SnapResponse } from "../../../../common/dtos/post/Snap";
 import { Endpoints } from "../../../../common/constants/Endpoints";
@@ -9,7 +8,7 @@ import { UnsnapRequest, UnsnapResponse } from "../../../../common/dtos/post/Unsn
 import { ErrorList } from "../ui/ErrorList";
 
 interface Props {
-    post: Post & Author & Snappers;
+    post: PostInfo;
     userId: number;
 }
 
@@ -17,9 +16,9 @@ export const PostListItem = (props: Props): JSX.Element => {
     const [ isSnapLoading, snapErrors, snapInitiator ] = useRequest<SnapRequest, SnapResponse>(Endpoints.Snap, RequestMethods.Post);
     const [ isUnsnapLoading, unsnapErrors, unsnapInitiator ] = useRequest<UnsnapRequest, UnsnapResponse>(Endpoints.Unsnap, RequestMethods.Post);
 
+    const [ post, setPost ] = useState(props.post);
     const [ isHovering, setIsHovering ] = useState(false);
-    const [ hasSnapped, setHasSnapped ] = useState(props.post.snappers.some(snapper => snapper.id == props.userId));
-    
+    const [ hasSnapped, setHasSnapped ] = useState(props.post.doesUserSnap);
 
     async function handleClick(): Promise<void> {
         const requestBody = {
@@ -27,10 +26,12 @@ export const PostListItem = (props: Props): JSX.Element => {
         };
 
         if (hasSnapped) {
-            await unsnapInitiator(requestBody);
+            const { responseBody } = await unsnapInitiator(requestBody);
+            setPost((responseBody as UnsnapResponse).post);
             setHasSnapped(false);
         } else {
-            await snapInitiator(requestBody);
+            const { responseBody } = await snapInitiator(requestBody);
+            setPost((responseBody as SnapResponse).post);
             setHasSnapped(true);
         }
     }
@@ -47,13 +48,13 @@ export const PostListItem = (props: Props): JSX.Element => {
                     <ErrorList errors={snapErrors.concat(unsnapErrors)} />
 
                     <Row justify="center" wrap className="fill-horizontal">
-                        <Typography.Text strong>{ props.post.firstLine }</Typography.Text>
+                        <Typography.Text strong>{ post.firstLine }</Typography.Text>
                     </Row>
                     <Row justify="center" wrap className="fill-horizontal">
-                        <Typography.Text strong>{ props.post.firstLine }</Typography.Text>
+                        <Typography.Text strong>{ post.firstLine }</Typography.Text>
                     </Row>
                     <Row justify="center" wrap className="fill-horizontal">
-                        <Typography.Text strong>{ props.post.firstLine }</Typography.Text>
+                        <Typography.Text strong>{ post.firstLine }</Typography.Text>
                     </Row>
                     
                     {
@@ -61,7 +62,7 @@ export const PostListItem = (props: Props): JSX.Element => {
                         <>
                             <Row justify="center" wrap>
                                 <Typography.Text type="secondary">
-                                    - {props.post.author.username}
+                                    - { post.author }
                                 </Typography.Text>
                             </Row>
                             <Row justify="center" wrap>
@@ -73,6 +74,12 @@ export const PostListItem = (props: Props): JSX.Element => {
                                         &#128076;
                                 </Button>
                             </Row>
+                            {
+                                props.post.snappers !== undefined && 
+                                <Row justify="center" className="fill-horizontal">
+                                    <Typography.Text>{ post.snappers } snaps</Typography.Text>
+                                </Row>
+                            }
                         </>
                     }
                 </Space>

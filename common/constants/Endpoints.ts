@@ -16,6 +16,7 @@ export const Endpoints: Record<string, Endpoint> = {
     Logout:              { controller: Controller.Auth, action: "logout"              },
 
     ListPosts:           { controller: Controller.Post, action: ""                    },
+    ListUserPosts:       { controller: Controller.Post, action: ":username/:cursor"   },
     CreatePost:          { controller: Controller.Post, action: "create"              },
     Snap:                { controller: Controller.Post, action: "snap"                },
     Unsnap:              { controller: Controller.Post, action: "unsnap"              },

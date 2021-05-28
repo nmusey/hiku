@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Endpoint } from "../../../common/constants/Endpoints";
 import { getJSON, getJSONWithParams, isResponseSuccess, postJSON } from "../utils/fetch.utils";
 
@@ -52,6 +52,11 @@ export const useRequest = <Req, Res>(endpoint: Endpoint, method: RequestMethods)
         },
         [setIsLoading, endpoint, method]
     );
+
+    useEffect(() => () => {
+        setErrors([]);
+        setIsLoading(false);
+    }, [ setErrors, setIsLoading ]);
 
     return [ isLoading, errors, initiator ];
 };

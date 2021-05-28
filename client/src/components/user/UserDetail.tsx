@@ -34,7 +34,7 @@ export const UserDetail = (props: Props): JSX.Element => {
     }, [getUserDetails, props.username, setUser, window.location.hash]);
 
     return (
-        <div className="fill">
+        <Row className="fill-horizontal">
             <ErrorList errors={errors} />
             {
                 isLoading || !user ? 
@@ -65,6 +65,6 @@ export const UserDetail = (props: Props): JSX.Element => {
                     </Card>
                 )
             }
-        </div>
+        </Row>
     );
 };

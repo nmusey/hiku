@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "antd";
 import { Endpoints } from "../../../../common/constants/Endpoints";
 import { RequestMethods, useRequest } from "../../hooks/useRequest";
@@ -24,6 +24,10 @@ export const FollowButton = (props: Props): JSX.Element => {
         unfollowInitiator({ userId: props.userId });
         setIsFollowing(false);
     }
+
+    useEffect(() => {
+        setIsFollowing(props.isFollowing);
+    }, [ props.isFollowing ]);
 
     return (
         <Button 

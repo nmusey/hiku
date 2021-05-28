@@ -52,14 +52,17 @@ export const getJSON = async (endpoint: Endpoint, queryParams?: Record<string, u
 
 export const getJSONWithParams = async (endpoint: Endpoint, params?: Record<string, string>): Promise<Response> => {
     const requestInit = buildRequestInit("GET");
-    let action = endpoint.action;
+    let action = "";
 
     if (params) {
-        Object.keys(params).forEach(key => {
-            action = endpoint.action.replace(
-                `:${key}`, 
-                params[key]
-            );
+        endpoint.action.split("/").forEach(urlPart => {
+            const key = urlPart.replace(":", "");
+
+            if (params[key]) {
+                urlPart = urlPart.replace(urlPart, params[key]);
+            }
+
+            action += urlPart + "/";
         });
     }
 

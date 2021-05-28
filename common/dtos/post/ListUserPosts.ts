@@ -1,6 +1,6 @@
 import { PostInfo } from "../../types/PostTypes";
 
-export interface ListPostsResponse {
+export interface ListUserPostsResponse {
     posts: PostInfo[];
     cursor: number;
 }
