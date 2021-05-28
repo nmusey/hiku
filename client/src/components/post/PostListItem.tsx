@@ -51,10 +51,10 @@ export const PostListItem = (props: Props): JSX.Element => {
                         <Typography.Text strong>{ post.firstLine }</Typography.Text>
                     </Row>
                     <Row justify="center" wrap className="fill-horizontal">
-                        <Typography.Text strong>{ post.firstLine }</Typography.Text>
+                        <Typography.Text strong>{ post.secondLine }</Typography.Text>
                     </Row>
                     <Row justify="center" wrap className="fill-horizontal">
-                        <Typography.Text strong>{ post.firstLine }</Typography.Text>
+                        <Typography.Text strong>{ post.thirdLine }</Typography.Text>
                     </Row>
                     
                     {
