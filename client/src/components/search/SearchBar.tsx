@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Input } from "antd";
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
 import { Endpoints } from "../../../../common/constants/Endpoints";
@@ -33,10 +33,10 @@ export const SearchBar = (props: Props): JSX.Element => {
             const { cursor, users } = responseBody as SearchResponse;
             setCursor(cursor);
             setSearchResults(users);
-            setIsSearchResultsDrawerOpen(true);
             return;
         }
 
+        setIsSearchResultsDrawerOpen(true);
         setSearchErrors(errors);
     }
 
@@ -45,6 +45,11 @@ export const SearchBar = (props: Props): JSX.Element => {
         props.closeSearchBar();
         setSearchTerm("");
     }
+
+    useEffect(() => {
+        setCursor(1);
+        setSearchResults([]);
+    }, [ searchTerm, setCursor, setSearchResults ]);
     
     return (
         <>
