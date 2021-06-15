@@ -1,5 +1,6 @@
 echo "Starting build"
 npm run build
+mv build/server/src/index.js build/server/src/index.mjs # This is necessary for PM2
 echo "Build complete"
 
 HIKU_ADDRESS=${HIKU_USER}@hiku.ca
