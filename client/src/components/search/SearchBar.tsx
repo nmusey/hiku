@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Form, Input } from "antd";
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
 import { Endpoints } from "../../../../common/constants/Endpoints";
@@ -25,8 +25,10 @@ export const SearchBar = (props: Props): JSX.Element => {
     const [ searchResults, setSearchResults ] = useState<UserInfo[]>([]);
     const [ searchErrors, setSearchErrors ] = useState<string[]>([]);
 
-    async function loadUsers(searchTerm: string): Promise<void> {
+    async function loadUsers(): Promise<void> {
         const requestBody = { cursor, searchTerm };
+        setIsSearchResultsDrawerOpen(true);
+
         const { response, responseBody } = await initiator(requestBody);
 
         if (isResponseSuccess(response)) {
@@ -35,15 +37,27 @@ export const SearchBar = (props: Props): JSX.Element => {
             setSearchResults(users);
             return;
         }
-
-        setIsSearchResultsDrawerOpen(true);
+        
         setSearchErrors(errors);
+    }
+
+    function handleSearchChange(event: ChangeEvent<HTMLInputElement>): void {
+        setSearchTerm(event.target.value);
+    }
+
+    function resetSearchBar(): void {
+        form.resetFields()
     }
 
     function closeSearchBar(): void {
         setCursor(1);
         props.closeSearchBar();
         setSearchTerm("");
+    }
+
+    function closeSearchResultsDrawer(): void {
+        setIsSearchResultsDrawerOpen(false);
+        props.closeSearchBar();
     }
 
     useEffect(() => {
@@ -53,15 +67,17 @@ export const SearchBar = (props: Props): JSX.Element => {
     
     return (
         <>
-            <Form className="fill-horizontal center" form={form}>
+            <Form className="fill-horizontal center" form={form} onFinish={loadUsers}>
                 <Button onClick={closeSearchBar} icon={<LeftOutlined/>} id="search-return-button"/>
                 <Form.Item name={FieldIds.Search} className="fill-horizontal">
                     <Input.Search 
                         placeholder="username" 
                         onSearch={loadUsers}
+                        onChange={handleSearchChange}
                         className="fill-horizontal" 
-                        suffix={<CloseOutlined onClick={ () => form.resetFields() }/>}
+                        suffix={<CloseOutlined onClick={resetSearchBar}/>}
                         loading={isLoading}
+                        autoFocus
                     />
                 </Form.Item>
             </Form>
@@ -70,8 +86,8 @@ export const SearchBar = (props: Props): JSX.Element => {
                 errors={searchErrors} 
                 visible={isSearchResultsDrawerOpen}
                 allUsersLoaded={cursor === 0}
-                onClose={() => setIsSearchResultsDrawerOpen(false)}
-                loadMore={() => loadUsers(searchTerm)}
+                onClose={closeSearchResultsDrawer}
+                loadMore={loadUsers}
             />
         </>
     );

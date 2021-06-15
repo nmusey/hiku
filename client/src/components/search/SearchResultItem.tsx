@@ -14,8 +14,13 @@ export const SearchResultItem = (props: Props): JSX.Element => {
     const history = useHistory();
 
     function goToUserPage(): void {
-        const url = replaceParams(Pages.UserDetails, { username: props.user.username });
-        history.push(url);
+        const userPageUrl = replaceParams(Pages.UserDetails, { username: props.user.username });
+
+        if (history.location.pathname == userPageUrl) {
+            location.reload();
+        } else {
+            history.push(userPageUrl);
+        }
     }
 
     return (
