@@ -17,4 +17,5 @@ echo "Please install dependencies manually if necessary by logging in and runnin
 echo "If any database changes were made please log into the server and run npx prisma migrate deploy."
 
 ssh ${HIKU_ADDRESS} -f pm2 start hiku
-echo "Service started on server
+echo "Service started on server."
+echo "The deploy was successful!"
