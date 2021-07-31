@@ -4,8 +4,19 @@
  */
 
 export default {
+  preset: "ts-jest",
+
+  globals: {
+    "ts-jest": {
+      tsconfig: "./tsconfig.base.json"
+    }
+  },
+
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
+
+  // Collect test coverage with each run
+  collectCoverage: true,
 
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
