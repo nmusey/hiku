@@ -1,7 +1,7 @@
 import { createTransport, SendMailOptions } from "nodemailer";
 
 const {EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASSWORD, MAIL_SENDER_ADDRESS, URL} = process.env;
-const transport = createTransport({
+export const transport = createTransport({
     host: EMAIL_HOST,
     port: parseInt(EMAIL_PORT!),
     secure: true,
