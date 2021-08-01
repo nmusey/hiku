@@ -8,7 +8,7 @@ export default {
 
   globals: {
     "ts-jest": {
-      tsconfig: "./tsconfig.base.json"
+      tsconfig: "./server/tsconfig.server.json"
     }
   },
 

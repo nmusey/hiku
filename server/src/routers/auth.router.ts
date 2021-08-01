@@ -7,7 +7,7 @@ import { comparePasswordToHashed, createRegistrationToken, hashPassword } from "
 import { sendRegistrationEmail } from "../utils/mail.utils.js";
 import { confirmRegistrationValidators } from "../validators/auth/confirmRegistration.validators.js";
 import { ConfirmRegistrationRequest, ConfirmRegistrationResponse } from "../../../common/dtos/auth/ConfirmRegistration.js";
-import { setInvalidJwt, setJwt } from "../utils/jwt.utils.js";
+import { setInvalidJWTOnResponse, setJWTOnResponse } from "../utils/jwt.utils.js";
 import { loginValidators } from "../validators/auth/login.validators.js";
 import { LoginResponse } from "../../../common/dtos/auth/Login.js";
 import { Endpoints } from "../../../common/constants/Endpoints.js";
@@ -69,7 +69,7 @@ authRouter.post("/" + Endpoints.ConfirmRegistration.action, confirmRegistrationV
             doesCurrentUserFollow: false
         } as ConfirmRegistrationResponse;
 
-        setJwt(res, user);     
+        setJWTOnResponse(res, user);     
 
         return res.status(204).json(responseBody);
     }
@@ -80,7 +80,7 @@ authRouter.post("/" + Endpoints.ConfirmRegistration.action, confirmRegistrationV
             data: { registrationToken: "" }
         });
 
-        setJwt(res, user);        
+        setJWTOnResponse(res, user);        
 
         const responseBody = {
             id: user.id,
@@ -123,11 +123,11 @@ authRouter.post("/" + Endpoints.Login.action, loginValidators, validationMiddlew
         doesCurrentUserFollow: false
     };
 
-    setJwt(res, user);
+    setJWTOnResponse(res, user);
     return res.json(responseBody);
 });
 
 authRouter.post("/" + Endpoints.Logout.action, async (req: Request, res: Response) => {
-    setInvalidJwt(res);
+    setInvalidJWTOnResponse(res);
     return res.send({});
 });

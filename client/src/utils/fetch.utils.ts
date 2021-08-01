@@ -1,6 +1,6 @@
 import { Endpoint } from "../../../common/constants/Endpoints";
 import { Pages } from "../constants/Pages";
-import { getJWT, JWT_KEY, setJWT } from "./jwt.utils";
+import { getJWT, JWT_KEY, setJWTOnResponse } from "./jwt.utils";
 import { buildApiEndpoint } from "./url.utils";
 
 const buildRequestInit = (method: string, body?: Record<string, unknown>): RequestInit => {
@@ -22,7 +22,7 @@ export const postJSON = async (endpoint: Endpoint, body = {}): Promise<Response>
     const url = buildApiEndpoint(endpoint);
 
     const response = await fetch(url, requestInit);
-    setJWT(response.headers.get(JWT_KEY));
+    setJWTOnResponse(response.headers.get(JWT_KEY));
 
     if (response.status === 401) {
         window.location.hash = Pages.Login.route;
@@ -41,7 +41,7 @@ export const getJSON = async (endpoint: Endpoint, queryParams?: Record<string, u
     }
 
     const response = await fetch(url, requestInit);
-    setJWT(response.headers.get(JWT_KEY));
+    setJWTOnResponse(response.headers.get(JWT_KEY));
 
     if (response.status === 401) {
         window.location.hash = Pages.Login.route;
@@ -69,7 +69,7 @@ export const getJSONWithParams = async (endpoint: Endpoint, params?: Record<stri
     let url = buildApiEndpoint({ ...endpoint, action });
 
     const response = await fetch(url, requestInit);
-    setJWT(response.headers.get(JWT_KEY));
+    setJWTOnResponse(response.headers.get(JWT_KEY));
 
     if (response.status === 401) {
         window.location.hash = Pages.Login.route;

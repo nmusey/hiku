@@ -6,6 +6,10 @@ const EXPIRY_LENGTH_MINUTES = 30;
 export const JWT_HEADER_KEY = "jwt";
 
 export const generateJWT = (user: User): string => {
+    if (!user.id || !user.email || !user.username) {
+        return "";
+    }
+
     const jwtBody = {
         id: user.id,
         email: user.email,
@@ -52,16 +56,21 @@ export const getBearerToken = (req: Request): string => {
         return "";
     }
 
-    const token = req.headers.authorization.split(" ")[1];
-    return token ? token : "";
+    const [tokenType, token] = req.headers.authorization.split(" ");
+
+    if (tokenType != "Bearer" || !token) {
+        return "";
+    }
+
+    return token;
 };
 
-export const setJwt = (res: Response, user: User): void => {
+export const setJWTOnResponse = (res: Response, user: User): void => {
     const jwt = generateJWT(user);
     res.setHeader(JWT_HEADER_KEY, jwt);
 };
 
-export const setInvalidJwt = (res: Response): void => {
+export const setInvalidJWTOnResponse = (res: Response): void => {
     const jwt = generateInvalidJWT();
     res.setHeader(JWT_HEADER_KEY, jwt);
 };
