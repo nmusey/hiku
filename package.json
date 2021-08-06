@@ -19,8 +19,7 @@
     "test:watch": "jest --watchAll"
   },
   "moduleDirectories": [
-    "node_modules",
-    "server/src"
+    "node_modules"
   ], 
   "repository": {
     "type": "git",

@@ -1,14 +1,13 @@
-import express, {Express, Router, json } from "express";
+import express, { Express, Router, json, static as expressStatic } from "express";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
-import { isDevelopment } from "../constants/Environment.js";
 import { loggerMiddleware } from "../middlewares/logger.middleware.js";
 
 export class Server {
     app: Express;
 
-    constructor(staticDirectory?: string) {
+    constructor(isDevelopment?: boolean, staticDirectory?: string) {
         this.app = express();
         
         this.app.use(json());
@@ -25,7 +24,7 @@ export class Server {
         );
 
         if (staticDirectory) {
-            this.app.use(express.static(staticDirectory));
+            this.app.use(expressStatic(staticDirectory));
         }
 
         if (isDevelopment) {
@@ -40,10 +39,8 @@ export class Server {
 
     start(): void {
         const { PORT } = process.env;
-
-        this.app.listen(PORT, () => {
-            console.log(`HTTP server started on port ${PORT}`);
-        });
+        
+        this.app.listen(PORT, () => console.log(`HTTP server started on port ${PORT}`));
     }
 }
 

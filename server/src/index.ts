@@ -1,4 +1,5 @@
 import {config as dotenvSafeConfig} from "dotenv-safe";
+import { isDevelopment } from "./constants/Environment.js";
 
 dotenvSafeConfig({
     path: ".env",
@@ -13,7 +14,7 @@ import { userRouter } from "./routers/user.router.js";
 import { Server } from "./server/Server.js";
 import { Controller } from "../../common/constants/Endpoints.js";
 
-const server = new Server(STATIC_PATH);
+const server = new Server(isDevelopment, STATIC_PATH);
 
 server.addRouter(authRouter, `/api/${Controller.Auth}`);
 server.addRouter(postRouter, `/api/${Controller.Post}`);

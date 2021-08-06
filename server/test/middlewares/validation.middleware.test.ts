@@ -3,14 +3,13 @@ import { mockRequest } from "../testUtils/mockRequest"
 import { mockResponse } from "../testUtils/mockResponse"
 
 let isEmptyResult = false;
-jest.mock("express-validator", () => {
-    return {
+jest.mock("express-validator", () => ({
         validationResult: jest.fn(() => ({
             isEmpty: () => isEmptyResult,
             array: () => []
         }))
-    };
-});
+    })
+);
 
 describe("validationMiddleware", () => {
     let request: any = {};

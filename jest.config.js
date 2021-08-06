@@ -37,6 +37,7 @@ export default {
   ],
 
   moduleNameMapper: {
+    "ipaddr.js": "ipaddr.js", // this dependency is broken by the name mapping below
     "^(.*)\.js$": "$1"
   },
 
