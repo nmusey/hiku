@@ -2,31 +2,25 @@ import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 import { decodeJWT, generateInvalidJWT, generateJWT, getBearerToken, getUserFromJWT, isValidJWT, JWT_HEADER_KEY, refreshJWT, setInvalidJWTOnResponse, setJWTOnResponse } from "../../src/utils/jwt.utils";
 import { Request } from "express";
+import { mockRequest } from "../testUtils/mockRequest";
+import { mockResponse } from "../testUtils/mockResponse";
 
 describe("jwt utils", () => {
     const MOCK_SECRET = "secret";
     const mockToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJlbWFpbCIsInVzZXJuYW1lIjoidGVzdF91c2VyIn0.OFqfV1bWEab7OX7M7TY6Xwg24LcyWuMEPEv3e5ePH0k";
     
-    let mockRequest: any;
-    let mockResponse: any;
+    let request: any;
+    let response: any;
 
     beforeAll(() => {
         process.env.JWT_SECRET = MOCK_SECRET;
     });
 
     beforeEach(() => {
-        mockRequest = {
-            headers: {
-                authorization: ""
-            }
-        };
-
-        mockResponse = {
-            headers: {} as Record<string, string>,
-            getHeader: (key: string) => mockResponse[key],
-            setHeader: (key: string, value: string) => mockResponse[key] = value,
-        };
+         request = { ...mockRequest };
+         response = { ...mockResponse };
     });
+        
 
     describe("generateJWT", () => {
         it("returns a verifiable JWT when given a full user", () => {
@@ -126,8 +120,8 @@ describe("jwt utils", () => {
 
     describe("getBearerToken", () => {
         it("returns whatever bearer token is attached to the request", () => {
-            mockRequest.headers.authorization = "Bearer token";
-            const result = getBearerToken(mockRequest);
+            request.headers.authorization = "Bearer token";
+            const result = getBearerToken(request);
 
             expect(result).toBe("token");
         });
@@ -177,25 +171,25 @@ describe("jwt utils", () => {
         };
 
         test("sets a header on the response", () => {
-            setJWTOnResponse(mockResponse, mockUser);
+            setJWTOnResponse(response, mockUser);
     
-            const tokenHeader = mockResponse.getHeader(JWT_HEADER_KEY);
+            const tokenHeader = response.getHeader(JWT_HEADER_KEY);
             expect(tokenHeader).toBeTruthy();
         });
 
         test("sets a valid JWT on the response", () => {
-            setJWTOnResponse(mockResponse, mockUser);
+            setJWTOnResponse(response, mockUser);
     
-            const tokenHeader = mockResponse.getHeader(JWT_HEADER_KEY) as string;
+            const tokenHeader = response.getHeader(JWT_HEADER_KEY) as string;
             expect(isValidJWT(tokenHeader)).toBe(true);
         });
     });
 
     describe("setInvalidJWTOnResponse", () => {
         test("sets a blank header on the response", () => {
-            setInvalidJWTOnResponse(mockResponse);
+            setInvalidJWTOnResponse(response);
     
-            const tokenHeader = mockResponse.getHeader(JWT_HEADER_KEY);
+            const tokenHeader = response.getHeader(JWT_HEADER_KEY);
             expect(tokenHeader).toBeDefined();
             expect(tokenHeader).toBeFalsy();
         });
@@ -203,18 +197,18 @@ describe("jwt utils", () => {
 
     describe("getUserFromJWT", () => {
         beforeEach(() => {
-            mockRequest.headers.authorization = `Bearer ${mockToken}`;
+            request.headers.authorization = `Bearer ${mockToken}`;
         });
 
         test("returns an object resembling a user", () => {
-            const result = getUserFromJWT(mockRequest);
+            const result = getUserFromJWT(request);
 
             expect(result).toBeDefined();
             expect(result?.email).toBeDefined();
         });
 
         test("does not return a password on the user object", () => {
-            const result = getUserFromJWT(mockRequest);
+            const result = getUserFromJWT(request);
 
             expect(result?.password).toBeUndefined();
         });

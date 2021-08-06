@@ -15,8 +15,13 @@
     "dev": "concurrently --names \"build-server,build-client,run-server\" --prefix-colors \"cyan,yellow,green\" \"npm run buildServer:dev\" \"npm run buildClient:dev\" \"npm run runServer:dev\"",
     "build": "npm run clean && npm run buildClient:prod && npm run buildServer:prod",
     "start": "npm run runServer:prod",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
+  "moduleDirectories": [
+    "node_modules",
+    "server/src"
+  ], 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nmusey/hiku.git"
