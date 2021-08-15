@@ -1,4 +1,3 @@
-import Prisma from "@prisma/client";
 import { Request, Response, Router } from "express";
 import { Endpoints } from "../../../common/constants/Endpoints.js";
 import { SearchRequest, SearchResponse } from "../../../common/dtos/user/Search.js";
@@ -12,11 +11,10 @@ import { userDetailsValidator } from "../validators/user/userDetails.validator.j
 import { followValidator } from "../validators/user/follow.validator.js";
 import { unfollowValidator } from "../validators/user/unfollow.validator.js";
 import { FollowRequest, FollowResponse } from "../../../common/dtos/user/Follow.js";
+import { findUserById, findUserWithFollowersAndFollowingByUsername, followUser, searchAllUsersByPartialUsername, searchUsersByPartialUsername, unfollowUser } from "../utils/database/user.utils.js";
 
 export const userRouter = Router();
 userRouter.use(authMiddleware);
-
-const prisma = new Prisma.PrismaClient();
 
 userRouter.post("/" + Endpoints.Search.action, searchValidators, validationMiddleware, async (req: Request, res: Response) => {
     const USERS_PER_SEARCH = 10;
@@ -24,20 +22,7 @@ userRouter.post("/" + Endpoints.Search.action, searchValidators, validationMiddl
     const { searchTerm, cursor } = req.body as SearchRequest; 
     const searcherId = getUserFromJWT(req)!.id;
 
-    const searchResults = await prisma.user.findMany({
-        where: {
-            username: {
-                contains: searchTerm,
-                mode: "insensitive"
-            }
-        },
-        include: {
-            followers: true
-        },
-        take: USERS_PER_SEARCH,
-        cursor: cursor === 1 ? undefined : { id: cursor },
-        skip: cursor === 1 ? 0 : 1
-    });
+    const searchResults = await searchUsersByPartialUsername(searchTerm, cursor, USERS_PER_SEARCH);
 
     const users: UserInfo[] = searchResults.map(user => {
         return ({
@@ -60,13 +45,7 @@ userRouter.get("/" + Endpoints.UserDetails.action, userDetailsValidator, validat
     const { username } = req.params;
     const requesterId = getUserFromJWT(req)!.id;
 
-    const user = await prisma.user.findUnique({
-        where: { username },
-        include: { 
-            followers: true,
-            following: true
-        }
-    });
+    const user = await findUserWithFollowersAndFollowingByUsername(username);
 
     if (!user) {
         return res.status(404).json({ errors: ["User not found."] });
@@ -87,24 +66,14 @@ userRouter.get("/" + Endpoints.UserDetails.action, userDetailsValidator, validat
 
 userRouter.post("/" + Endpoints.Follow.action, followValidator, validationMiddleware, async (req: Request, res: Response) => {
     const { userId } = req.body as FollowRequest;
-    const requesterId = getUserFromJWT(req)!.id;
+    const currentUserId = getUserFromJWT(req)!.id;
 
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await findUserById(userId);
     if (!user) {
         return res.status(404).json({ errors: ["No user found with that id."] });
     }
 
-    const updatedUser = await prisma.user.update({
-        where: { id: userId },
-        data: {
-            followers: {
-                connect: { id: requesterId }
-            }
-        }, 
-        include: {
-            followers: true
-        }
-    });
+    const updatedUser = await followUser(currentUserId, userId);
 
     const responseBody: FollowResponse = {
         followers: updatedUser.followers.length
@@ -115,28 +84,19 @@ userRouter.post("/" + Endpoints.Follow.action, followValidator, validationMiddle
 
 userRouter.post("/" + Endpoints.Unfollow.action, unfollowValidator, validationMiddleware, async (req: Request, res: Response) => {
     const { userId } = req.body as FollowRequest;
-    const requesterId = getUserFromJWT(req)!.id;
+    const currentUserId = getUserFromJWT(req)!.id;
 
-    if (userId === requesterId) {
+    if (userId === currentUserId) {
         return res.status(400).json({ errors: ["You cannot unfollow yourself."] });
     }
 
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await findUserById(userId);
+
     if (!user) {
         return res.status(404).json({ errors: ["No user found with that id."] });
     }
 
-    const updatedUser = await prisma.user.update({
-        where: { id: userId },
-        data: {
-            followers: {
-                disconnect: { id: requesterId }
-            }
-        }, 
-        include: {
-            followers: true
-        }
-    });
+    const updatedUser = await unfollowUser(currentUserId, userId);
 
     const responseBody: FollowResponse = {
         followers: updatedUser.followers.length
