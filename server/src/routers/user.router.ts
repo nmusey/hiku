@@ -11,7 +11,7 @@ import { userDetailsValidator } from "../validators/user/userDetails.validator.j
 import { followValidator } from "../validators/user/follow.validator.js";
 import { unfollowValidator } from "../validators/user/unfollow.validator.js";
 import { FollowRequest, FollowResponse } from "../../../common/dtos/user/Follow.js";
-import { findUserById, findUserWithFollowersAndFollowingByUsername, followUser, searchAllUsersByPartialUsername, searchUsersByPartialUsername, unfollowUser } from "../utils/database/user.utils.js";
+import { findUserById, findUserWithFollowersAndFollowingByUsername, followUser, searchUsersByPartialUsername, unfollowUser } from "../utils/database/user.utils.js";
 
 export const userRouter = Router();
 userRouter.use(authMiddleware);
