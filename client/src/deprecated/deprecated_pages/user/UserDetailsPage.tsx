@@ -1,9 +1,9 @@
 import { Row } from "antd";
 import React from "react";
 import { useParams } from "react-router";
-import { AuthenticatedLayout } from "../../components/layouts/AuthenticatedLayout";
-import { UserPostList } from "../../components/post/UserPostList";
-import { UserDetail } from "../../components/user/UserDetail";
+import { AuthenticatedLayout } from "../../deprecated_components/layouts/AuthenticatedLayout";
+import { UserPostList } from "../../deprecated_components/post/UserPostList";
+import { UserDetail } from "../../deprecated_components/user/UserDetail";
 
 interface Params {
     username: string;

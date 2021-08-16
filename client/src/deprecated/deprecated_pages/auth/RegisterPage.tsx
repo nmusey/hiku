@@ -1,7 +1,7 @@
 import React from "react";
-import { UnauthenticatedLayout } from "../../components/layouts/UnauthenticatedLayout";
+import { UnauthenticatedLayout } from "../../deprecated_components/layouts/UnauthenticatedLayout";
 import { Card } from "antd";
-import { RegisterForm } from "../../components/auth/RegisterForm";
+import { RegisterForm } from "../../deprecated_components/auth/RegisterForm";
 
 export const RegisterPage = (): JSX.Element => (
     <UnauthenticatedLayout>

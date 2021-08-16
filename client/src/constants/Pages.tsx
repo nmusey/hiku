@@ -1,12 +1,12 @@
 import React from "react";
-import { LoginPage } from "../pages/auth/LoginPage";
-import { RegisterPage } from "../pages/auth/RegisterPage";
-import { PostListPage } from "../pages/posts/PostListPage";
-import { RegisterSuccessPage } from "../pages/auth/RegisterSuccessPage";
-import { ConfirmRegistrationPage } from "../pages/auth/ConfirmRegistrationPage";
-import { LogoutPage } from "../pages/auth/LogoutPage";
-import { UserDetailsPage } from "../pages/user/UserDetailsPage";
-import { LandingPage } from "../pages/LandingPage";
+import { LoginPage } from "../deprecated_pages/auth/LoginPage";
+import { RegisterPage } from "../deprecated_pages/auth/RegisterPage";
+import { PostListPage } from "../deprecated_pages/posts/PostListPage";
+import { RegisterSuccessPage } from "../deprecated_pages/auth/RegisterSuccessPage";
+import { ConfirmRegistrationPage } from "../deprecated_pages/auth/ConfirmRegistrationPage";
+import { LogoutPage } from "../deprecated_pages/auth/LogoutPage";
+import { UserDetailsPage } from "../deprecated_pages/user/UserDetailsPage";
+import { LandingPage } from "../deprecated_pages/LandingPage";
 
 export interface Page {
     route: string;

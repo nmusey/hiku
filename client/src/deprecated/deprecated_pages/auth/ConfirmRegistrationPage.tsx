@@ -1,8 +1,8 @@
 import React from "react";
-import { UnauthenticatedLayout } from "../../components/layouts/UnauthenticatedLayout";
+import { UnauthenticatedLayout } from "../../deprecated_components/layouts/UnauthenticatedLayout";
 import { Card } from "antd";
 import { useQueryParams } from "../../hooks/useQueryParams";
-import { ConfirmRegistration } from "../../components/auth/ConfirmRegistration";
+import { ConfirmRegistration } from "../../deprecated_components/auth/ConfirmRegistration";
 
 export const ConfirmRegistrationPage = (): JSX.Element => {
     const username = useQueryParams("username");
