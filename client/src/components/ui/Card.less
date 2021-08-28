@@ -1,0 +1,17 @@
+@import "../../styles/colors.less"; 
+@import "../../styles/boxes.less"; 
+@import "../../styles/spacing.less"; 
+
+.card {
+    background: @background-gradient-1;
+    box-shadow: @box-shadow-pop-out-upper-left, @box-shadow-pop-out-lower-right;
+    border-radius: @border-radius;
+
+    position: relative;
+    z-index: 100;
+
+    box-sizing: border-box;
+
+    padding: var(--space-default);
+    margin: var(--space-default);
+}

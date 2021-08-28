@@ -32,10 +32,6 @@ export default {
             },
             {
                 test: /\.less$/,
-                include: [
-                    resolve(currentDirectory, "src", "styles"), 
-                    resolve(currentDirectory, "..", "node_modules", "antd")
-                ],
                 use: [
                     "style-loader", 
                     "css-loader",
@@ -44,12 +40,13 @@ export default {
                         options: {
                             lessOptions: { javascriptEnabled: true }
                         }
-                    } 
+                    },
+                    "postcss-loader"
                 ]
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"],
+                use: ["style-loader", "css-loader", "postcss-loader"],
             },
             {
                 test: /\.(jpeg|png|gif|svg)$/,
