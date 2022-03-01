@@ -1,6 +1,6 @@
 # Hiku
 
-Hiku is a social media site where users can post haikus. It was built to practice developing a full-stack app from the ground up until it is deployed. You can test it out yourself by going to [hiku.ca](hiku.ca) or by following the instructions in the "Development" section to clone this repo and run it yourself.
+Hiku is a social media site where users can post haikus. It was built to practice developing a full-stack app from the ground up until it is deployed. You can test it out yourself by going to [hiku.ca](https://hiku.ca) or by following the instructions in the "Development" section to clone this repo and run it yourself.
 
 ## Project Overview
 The app is built using a simple client and server structure. 
@@ -33,11 +33,14 @@ You will need to install [Node](https://nodejs.org/en/), which will also install
 Clone the app using `git clone https://github.com/nmusey/hiku.git` and then `cd hiku` to change to the repo's main directory. From here run `npm install` to install all dependencies.
 
 Hiku uses PostgreSQL, which can be installed from [here](https://www.postgresql.org). The database must be running for you to run the project. After starting the PostgreSQL server, create the tables by running `npx prisma migrate dev`. 
+After installing Postgres, create a `hiku` user using the following command: `psql --command="CREATE USER hiku CREATEDB"`.
 
 You will also need a `.env` file to run the project. To start, run `cp .env.example .env` and then open `.env` in a text editor to fill in all values. You will need access to an email server, but this may require extra configuration if it's not the hiku.ca server. That can be configured in `server/src/utils/mail.utils.ts`. 
 
 ### Running the app locally
+To run the app you'll need a build. Get this by runnin `npm run build`.
 After installing all dependencies, the server can be started with `npm run dev`. The server will start at `localhost:PORT` where PORT is specified in your `.env` file.
+There may be a few errors the first time you start up the server, if these prevent the app from running just rerun `npm run dev` after a minute.
 
 ### Deploying the app
 To deploy the app just run `deploy.sh`. This will build and upload the code as well as run it on the server. It does require SSH access, which must be set up from a machine with existing SSH capabilities.
