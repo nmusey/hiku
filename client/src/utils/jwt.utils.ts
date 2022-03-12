@@ -10,7 +10,7 @@ export const getJWT = (): string | null => {
     return window.localStorage.getItem(JWT_KEY);
 };
 
-export const setJWT = (newToken: string | null): void => {
+export const setJWTOnResponse = (newToken: string | null): void => {
     window.localStorage.setItem(JWT_KEY, newToken || "");
 };
 
