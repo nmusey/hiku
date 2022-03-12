@@ -4,19 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "buildClient:dev": "webpack --config ./client/webpack.config.js --node-env development --mode development --watch",
-    "buildClient:prod": "webpack --config ./client/webpack.config.js --node-env production --mode production",
-    "buildServer:dev": "tsc --watch --project server/tsconfig.server.json",
-    "buildServer:prod": "tsc --project server/tsconfig.server.json",
-    "runServer:dev": "nodemon build/server/src/index.js",
+    "buildClient:dev": "npx webpack --config ./client/webpack.config.js --node-env development --mode development --watch",
+    "buildClient:prod": "npx webpack --config ./client/webpack.config.js --node-env production --mode production",
+    "buildServer:dev": "npx tsc --watch --project server/tsconfig.server.json",
+    "buildServer:prod": "npx tsc --project server/tsconfig.server.json",
+    "runServer:dev": "npx nodemon build/server/src/index.js",
     "runServer:prod": "node build/server/src/index.js",
-    "lint": "eslint **/*.tsx **/*.ts",
+    "lint": "npx eslint **/*.tsx **/*.ts",
     "clean": "rm -rf build",
-    "dev": "concurrently --names \"build-server,build-client,run-server\" --prefix-colors \"cyan,yellow,green\" \"npm run buildServer:dev\" \"npm run buildClient:dev\" \"npm run runServer:dev\"",
+    "dev": "npx concurrently --names \"build-server,build-client,run-server\" --prefix-colors \"cyan,yellow,green\" \"npm run buildServer:dev\" \"npm run buildClient:dev\" \"npm run runServer:dev\"",
     "build": "npm run clean && npm run buildClient:prod && npm run buildServer:prod",
     "start": "npm run runServer:prod",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test": "npx jest",
+    "test:watch": "npx jest --watchAll"
   },
   "moduleDirectories": [
     "node_modules"
